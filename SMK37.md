@@ -42,13 +42,14 @@ SEL, ENV, ...). The SMK-37 adds the rest.
 | KNOB BANK | the picker: the pads and the screen show the eight pieces (top row) and the eight modes (bottom row); a pad picks. Lit while it is open; press again to close it. It also shows for a moment after a PRESETS or ALGORITHM turn |
 | FADER BANK | what the faders set: A the levels (Pad, Bells, Bass, Pulse), B the space (Echo, Echo time, Reverb, Size), C the garden (Evolve, Motion, Drift, Density). Lit off bank A. The fader card shows the bank and its values |
 | Faders 1..4 | the current bank's four values; a fader takes over only once it moves (also after a bank change) |
-| Pitch wheel | up: more echo (a throw); down: more reverb (a wash). Back at rest, the sends are as set |
-| Mod wheel | Bright, added to the pad's |
+| Pitch wheel | pitch bend, +-2 semitones, on everything that sounds: the pad, the bells (also those still ringing), the bass and the pulse's thump |
+| Mod wheel | vibrato on everything that sounds: 5.5 Hz, up to +-1/2 semitone at the top |
 | OCTAVE- + OCTAVE+ held 5 s | UPDATE MODE |
 | OCTAVE- + OCTAVE+ held at power-on | HARDWARE CALIBRATION: teach the buttons and knobs again (it asks by the FM-1's names) |
 
 Only one card is up at a time: KNOB BANK closes the fader card, FADER BANK closes the picker. The wheels never
-change what is saved. Lights Off (Setup page) darkens the pads; the SMK-37 has no key lights and no dim button
+change what is saved: the bend is gone when the pitch wheel is back at rest, the vibrato with the mod wheel at
+zero. Lights Off (Setup page) darkens the pads; the SMK-37 has no key lights and no dim button
 glow, so On and Keys look the same there.
 
 The SMK-37's TRS jack is a MIDI output and this build does not use it; there is no TRS MIDI IN, so MIDI and its

@@ -297,6 +297,32 @@ void en_clock(int msg) { post(C_CLOCK, msg, 0); }
 void en_regrow(void) { post(C_REGROW, 0, 0); }
 #if BOARD_SMK37
 void en_bell(int off, int vel) { post(C_BELL, off < 0 ? 0 : off > 15 ? 15 : off, vel < 1 ? 1 : vel > 127 ? 127 : vel); }
+/* the wheels (main loop -> render): read once per block; a torn read only lasts one block */
+static volatile int32_t perf_bend, perf_modw;
+void en_perf(int32_t bend_q12, int32_t modw)
+{
+    perf_bend = bend_q12 < -8192 ? -8192 : bend_q12 > 8192 ? 8192 : bend_q12;
+    perf_modw = modw < 0 ? 0 : modw > 127 ? 127 : modw;
+}
+static float pmul = 1.0f, vib_ph;              /* the pitch factor of this block; the vibrato's phase (0..1) */
+#define VIB_HZ 5.5f                            /* the mod wheel's vibrato: its rate, and its depth at full */
+#define VIB_SEMI 0.5f
+static void perf_block(uint32_t n)
+{
+    float semis = (float)perf_bend * (1.0f / 4096.0f);
+    int32_t mw = perf_modw;
+    vib_ph += VIB_HZ * (float)n * (1.0f / EN_SR);
+    while (vib_ph >= 1.0f)
+        vib_ph -= 1.0f;
+    if (mw) {                                  /* a triangle, -1..1 */
+        float tri = vib_ph < 0.5f ? 4.0f * vib_ph - 1.0f : 3.0f - 4.0f * vib_ph;
+        semis += tri * VIB_SEMI * (float)mw * (1.0f / 127.0f);
+    }
+    pmul = semis == 0.0f ? 1.0f : fm_exp2f(semis * (1.0f / 12.0f));
+}
+#define PM(x) ((x) * pmul)                     /* a pitch increment, bent */
+#else
+#define PM(x) (x)
 #endif
 
 /* -------------------------------------------------------------- state --- */
@@ -497,7 +523,7 @@ static void pad_coefs(pad_t *v, int i)          /* every 32 samples: the breath,
     v->vib += (4.6f + 0.4f * (float)i) * 32.0f / EN_SR;
     if (v->vib >= 1.0f)
         v->vib -= 1.0f;
-    f = mtof(v->note + 0.08f * motion * mod[i].v);                          /* a slow drift, as tape */
+    f = PM(mtof(v->note + 0.08f * motion * mod[i].v));                      /* a slow drift, as tape */
     v->inc[0] = f * 0.99856f * (1.0f / EN_SR);  /* -2.5 and +2.5 cents */
     v->inc[1] = f * 1.00144f * (1.0f / EN_SR);
     vw = fm_clampf((float)bright * 0.01f + 0.25f * arcm + 0.2f * motion * mod[(i + 2) % NMOD_PAD].v, 0.0f, 1.0f) * 2.999f;
@@ -1579,7 +1605,7 @@ static void render_bass(uint32_t n)
         return;
     }
     bass.note += (bass.target - bass.note) * fm_minf((float)n * glide_k, 1.0f);   /* Glide */
-    inc = mtof(bass.note) * (1.0f / EN_SR);
+    inc = PM(mtof(bass.note) * (1.0f / EN_SR));
     for (j = 0; j < n; j++) {
         float x = sine(ph) * 0.75f + sine(ph * 0.5f + 0.25f) * 0.45f + sine(ph * 2.0f) * 0.12f;
         ph += inc;
@@ -1622,8 +1648,8 @@ static void render_bells(uint32_t n)
             mixr[j] += x * v->gr;
             rsend[j] += x * 0.7f;
             esend[j] += x * 0.85f;
-            cph += v->cinc;
-            mph += v->minc;
+            cph += PM(v->cinc);
+            mph += PM(v->minc);
             if (cph >= 1.0f)
                 cph -= 1.0f;
             if (mph >= 1.0f)
@@ -1694,7 +1720,7 @@ static void render_drums(uint32_t n)
             mixl[j] += x;
             mixr[j] += x;
             rsend[j] += x * 0.1f;
-            ph += inc;
+            ph += PM(inc);
             if (ph >= 1.0f)
                 ph -= 1.0f;
             inc += (v->inc_end - inc) * 0.0012f;
@@ -1717,6 +1743,9 @@ static void render_chunk(int32_t *out, uint32_t n, float gain)
     const float rg = rev_send * rev_in_gain * (1.0f - 0.25f * arcm), eg = echo_send;
     for (j = 0; j < n; j++)
         mixl[j] = mixr[j] = rsend[j] = esend[j] = 0.0f;
+#if BOARD_SMK37
+    perf_block(n);
+#endif
     render_pad(n);
     render_bass(n);
     render_bells(n);

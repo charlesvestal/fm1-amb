@@ -90,10 +90,6 @@ static void say(const char *a, const char *b)
     ui.msg_until = plat_ms() + 1300u;
 }
 void ui_say(const char *a, const char *b) { say(a, b); }
-#if BOARD_SMK37
-static int smk_live(int k, int v);             /* a value as the engine gets it: the wheels add to it */
-static void smk_resend(void);
-#endif
 
 static void itoa_u(uint32_t v, char *b)
 {
@@ -186,11 +182,7 @@ static void knob_set(int k, int v)
         return;
     if (k < P_NPARAMS) {
         proj.par[k] = (int16_t)v;
-#if BOARD_SMK37
-        en_set(k, smk_live(k, v));
-#else
         en_set(k, v);
-#endif
     } else if (k == K_LEDS) {
         proj.leds = (uint8_t)v;
     }
@@ -261,9 +253,6 @@ static void set_piece(int i)                    /* the piece playing kept as it 
 {
     project_piece(i);
     project_apply();
-#if BOARD_SMK37
-    smk_resend();
-#endif
     en_seed(plat_ms());
     en_regrow();
     say("PIECE", piece_name(proj.piece));
@@ -351,8 +340,9 @@ static void midi_in(void)
  *                  time, Reverb, Size), C the garden (Evolve, Motion, Drift, Density). A fader takes over once it
  *                  moves. The fader card shows them; the picker and the fader card close each other
  *   < >            the previous / next page (as SELECT)
- *   pitch wheel    up: more echo (a throw), down: more reverb (a wash); at rest, as set
- *   mod wheel      Bright, added to the pad's */
+ *   pitch wheel    pitch bend, +-2 semitones, on everything that sounds (the ringing bells too)
+ *   mod wheel      vibrato on everything that sounds, 5.5 Hz, up to +-1/2 semitone
+ * The wheels never change what is saved. */
 #define SMK_NBANK 3
 #define SMK_CARD_MS 1800u
 static const uint8_t SMK_FADER_PAR[SMK_NBANK][4] = {{P_PAD, P_BELLS, P_BASS, P_PULSE},
@@ -369,7 +359,7 @@ static struct {
     int8_t ftouch;                     /* the fader moved last (the card shows it), -1 none */
     uint8_t pick;                      /* KNOB BANK: the picker pinned */
     uint32_t pick_until, card_until;   /* the picker after a turn; the fader card */
-    int32_t pitch, modw;               /* the wheels: pitch -127..127, mod 0..127 */
+    int32_t pitch, modw;               /* the wheels: pitch -127..127 (0 at rest), mod 0..127 */
     float lglow[EN_NLOOP];             /* each loop's light, last frame (a rise: it rang) */
     int8_t lstep[EN_NLOOP];            /* the step each loop rang last, -1 none */
     float tap[SMK_NPADS];              /* the pads' own bells, by step, fading */
@@ -385,28 +375,6 @@ static void smk_reset(void)
 }
 static int smk_picker(void) { return smk.pick || plat_ms() < smk.pick_until; }
 static int smk_fcard(void) { return plat_ms() < smk.card_until; }
-
-static int smk_live(int k, int v)
-{
-    int lo, hi, add = 0;
-    if (k == P_ECHO && smk.pitch > 0)
-        add = smk.pitch * 100 / 127;
-    else if (k == P_REVERB && smk.pitch < 0)
-        add = -smk.pitch * 100 / 127;
-    else if (k == P_BRIGHT)
-        add = smk.modw * 100 / 127;
-    if (!add)
-        return v;
-    knob_range(k, &lo, &hi);
-    v += add;
-    return v > hi ? hi : v;
-}
-static void smk_resend(void)                     /* the wheels' parameters again (after a piece is taken up) */
-{
-    en_set(P_ECHO, smk_live(P_ECHO, proj.par[P_ECHO]));
-    en_set(P_REVERB, smk_live(P_REVERB, proj.par[P_REVERB]));
-    en_set(P_BRIGHT, smk_live(P_BRIGHT, proj.par[P_BRIGHT]));
-}
 
 /* hardware pad p (0..7 the top row, 8..15 the bottom row) <-> the bells' step (0..7 the bottom row, 8..15 the top) */
 static int smk_step_of_pad(int p) { return p < 8 ? p + 8 : p - 8; }
@@ -482,25 +450,23 @@ static void smk_input(void)
         ui.act_t = now;
     }
     if (plat_wheels(&pitch, &modw)) {
-        char t[8] = "+";
-        int pm = (int)(pitch * 100 / 127), mm = (int)(modw * 100 / 127);
-        if (pitch != smk.pitch) {
-            smk.pitch = pitch;
-            en_set(P_ECHO, smk_live(P_ECHO, proj.par[P_ECHO]));
-            en_set(P_REVERB, smk_live(P_REVERB, proj.par[P_REVERB]));
-            if (pm) {
-                itoa_u((uint32_t)(pm < 0 ? -pm : pm), t + 1);
-                say(pm > 0 ? "ECHO" : "REVERB", t);
-            }
+        char t[8];
+        int32_t st10 = (pitch < 0 ? -pitch : pitch) * 20 / 127;   /* the bend in tenths of a semitone */
+        en_perf(pitch * 8192 / 127, modw);           /* the engine: +-2 semitones, the vibrato's depth */
+        if (pitch != smk.pitch && st10) {
+            t[0] = pitch > 0 ? '+' : '-';
+            t[1] = (char)('0' + st10 / 10);
+            t[2] = '.';
+            t[3] = (char)('0' + st10 % 10);
+            t[4] = 0;
+            say("BEND", t);
         }
-        if (modw != smk.modw) {
-            smk.modw = modw;
-            en_set(P_BRIGHT, smk_live(P_BRIGHT, proj.par[P_BRIGHT]));
-            if (mm) {
-                itoa_u((uint32_t)mm, t + 1);
-                say("BRIGHT", t);
-            }
+        if (modw != smk.modw && modw) {
+            itoa_u((uint32_t)(modw * 100 / 127), t);
+            say("VIBRATO", t);
         }
+        smk.pitch = pitch;
+        smk.modw = modw;
         ui.act_t = now;
     }
 }
@@ -606,9 +572,6 @@ static void input(void)
         ui.help = 0;
         project_piece_reset();
         project_apply();
-#if BOARD_SMK37
-        smk_resend();
-#endif
         en_regrow();
         say("RESET", piece_name(proj.piece));
         mark_dirty();

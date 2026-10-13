@@ -80,6 +80,9 @@ void en_regrow(void);                          /* a new piece: fresh loops, the 
 /* The SMK-37 build: a bell from a pad. off: scale steps above the chord's root (as a loop's notes; 0..15), in
  * the bells' middle register and octave; vel 1..127. It rings in loop (off % 4)'s shade, outside the loops. */
 void en_bell(int off, int vel);
+/* the wheels: pitch bend in 1/4096 semitone (+-2 semitones: 8192) and the mod wheel's vibrato depth 0..127, on
+ * everything that sounds (the pad, the bells, also those ringing, the bass and the thump); never saved */
+void en_perf(int32_t bend_q12, int32_t modw);
 #endif
 /* MIDI clock in (as FoMni): ticks drive the 1/16 grid (6 a step) while they keep coming */
 enum { EN_CLK_TICK, EN_CLK_START, EN_CLK_CONTINUE, EN_CLK_STOP };

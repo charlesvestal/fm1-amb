@@ -66,7 +66,7 @@ expect picker 1
 sbtn FADER_BANK
 expect picker 0
 expect fcard 1
-# the wheels add, and do not change what is saved
+# the wheels bend and add vibrato, and do not change what is saved
 wheel pitch 127
 wheel mod 127
 wait 200
