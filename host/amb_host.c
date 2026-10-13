@@ -20,6 +20,14 @@
  *   expect WHAT VALUE            check state: exit 1 on mismatch; VALUE "<N" / ">N" is a bound
  *   reboot                       re-run boot from the simulated flash (persistence test)
  *   storev3 N                    write the project as format 3 did, with the playing piece's Pad at N
+ *
+ * The SMK-37 build (host/build_host.sh smk37: build/host/amb_host_smk37), its controls too:
+ *   kbkey K                      tap keybed key K (0..36 = C3..C6); key / tapkey K are the middle 27 as above
+ *   sbtn NAME                    tap KNOB_BANK FADER_BANK LEFT RIGHT
+ *   pad P [VEL]                  tap pad P (0..7 the top row, 8..15 the bottom row), velocity 1..127 (100)
+ *   fader I V                    fader I (0..3) to V (0..127); they start at 64
+ *   wheel pitch|mod V            pitch -127..127, mod 0..127
+ *   pads                         print the pads' colours
  */
 #define EN_HOST 1
 #include <stdio.h>
@@ -76,6 +84,49 @@ void plat_leds(uint32_t b, uint32_t k)
     lit_btn = b;
     lit_keys = k;
 }
+#if BOARD_SMK37
+/* the SMK-37's own controls (plat.h SMK section), driven by the script */
+static uint32_t smk_btn_held, smk_lit, pad_hits;
+static uint64_t kb_held, kb_hits;
+static int pad_vel_v[SMK_NPADS], fader_v[4] = {64, 64, 64, 64};
+static int32_t wheel_p, wheel_m;
+static int wheel_new;
+static uint8_t pad_rgb[SMK_NPADS][3];
+uint32_t plat_smk_buttons(void) { return smk_btn_held; }
+void plat_smk_leds(uint32_t lit) { smk_lit = lit; }
+uint64_t plat_keybed(void) { return kb_held; }
+uint64_t plat_keybed_hits(void)
+{
+    uint64_t h = kb_hits;
+    kb_hits = 0;
+    return h;
+}
+uint32_t plat_pad_hits(void)
+{
+    uint32_t h = pad_hits;
+    pad_hits = 0;
+    return h;
+}
+int plat_pad_vel(int p) { return (uint32_t)p < SMK_NPADS && pad_vel_v[p] ? pad_vel_v[p] : 100; }
+int plat_fader(int i) { return (uint32_t)i < 4u ? fader_v[i] : -1; }
+int plat_wheels(int32_t *pitch, int32_t *modw)
+{
+    if (!wheel_new)
+        return 0;
+    wheel_new = 0;
+    *pitch = wheel_p;
+    *modw = wheel_m;
+    return 1;
+}
+void plat_pad_rgb(int p, uint8_t r, uint8_t g, uint8_t b)
+{
+    if ((uint32_t)p < SMK_NPADS) {
+        pad_rgb[p][0] = r;
+        pad_rgb[p][1] = g;
+        pad_rgb[p][2] = b;
+    }
+}
+#endif
 static int glow_on = 1;                 /* the device's button glow (plat_glow); the lights printed are the bright ones */
 void plat_glow(int on) { glow_on = on; }
 void plat_play_red(int red) { (void)red; }      /* the device's PLAY colour: green, red while recording */
@@ -348,6 +399,18 @@ static int expect(const char *what, const char *val)
     int got;
     if (!strcmp(what, "playing"))
         got = en_playing;
+#if BOARD_SMK37
+    else if (!strcmp(what, "fbank"))              /* the fader bank, 0 A .. 2 C */
+        got = smk.fbank;
+    else if (!strcmp(what, "picker"))             /* the picker is up */
+        got = smk_picker();
+    else if (!strcmp(what, "fcard"))              /* the fader card is up */
+        got = smk_fcard();
+    else if (!strcmp(what, "smkleds"))            /* KNOB BANK, FADER BANK, <, > lit: bits */
+        got = (int)smk_lit;
+    else if (!strncmp(what, "padg", 4))           /* padgN: pad N's green */
+        got = pad_rgb[atoi(what + 4) & 15][1];
+#endif
     else if (!strcmp(what, "frozen"))
         got = en_frozen;
     else if (!strcmp(what, "view"))
@@ -453,16 +516,75 @@ int main(int argc, char **argv)
             int k = key_of(a);
             if (cmd[0] == 't') {
                 held_keys |= 1u << k;
+#if BOARD_SMK37
+                kb_held |= 1ull << (k + 5);       /* the keybed's F3 is key 5 */
+                kb_hits |= 1ull << (k + 5);
+#endif
                 run_ms(60);
                 held_keys &= ~(1u << k);
+#if BOARD_SMK37
+                kb_held &= ~(1ull << (k + 5));
+#endif
                 run_ms(30);
             } else {
                 if (!strcmp(b, "down"))
                     held_keys |= 1u << k;
                 else
                     held_keys &= ~(1u << k);
+#if BOARD_SMK37
+                if (!strcmp(b, "down")) {
+                    kb_held |= 1ull << (k + 5);
+                    kb_hits |= 1ull << (k + 5);
+                } else {
+                    kb_held &= ~(1ull << (k + 5));
+                }
+#endif
                 run_ms(2);
             }
+#if BOARD_SMK37
+        } else if (!strcmp(cmd, "kbkey")) {
+            int k = atoi(a) % SMK_NKEYBED;
+            kb_held |= 1ull << k;
+            kb_hits |= 1ull << k;
+            if (k >= 5 && k < 32)
+                held_keys |= 1u << (k - 5);
+            run_ms(60);
+            kb_held &= ~(1ull << k);
+            if (k >= 5 && k < 32)
+                held_keys &= ~(1u << (k - 5));
+            run_ms(30);
+        } else if (!strcmp(cmd, "sbtn")) {
+            static const char *const SB_N[NSB] = {"KNOB_BANK", "FADER_BANK", "LEFT", "RIGHT"};
+            int i = find_name(SB_N, NSB, a);
+            if (i < 0) {
+                printf("line %d: no SMK button %s\n", lineno, a);
+                return 2;
+            }
+            smk_btn_held |= 1u << i;
+            run_ms(40);
+            smk_btn_held &= ~(1u << i);
+            run_ms(40);
+        } else if (!strcmp(cmd, "pad")) {
+            int pd = atoi(a) & 15;
+            pad_vel_v[pd] = b[0] ? atoi(b) : 100;
+            pad_hits |= 1u << pd;
+            run_ms(40);
+        } else if (!strcmp(cmd, "fader")) {
+            fader_v[atoi(a) & 3] = atoi(b);
+            run_ms(20);
+        } else if (!strcmp(cmd, "wheel")) {
+            if (a[0] == 'p')
+                wheel_p = atoi(b);
+            else
+                wheel_m = atoi(b);
+            wheel_new = 1;
+            run_ms(20);
+        } else if (!strcmp(cmd, "pads")) {
+            int i;
+            for (i = 0; i < SMK_NPADS; i++)
+                printf("%s%3d,%3d,%3d%s", i % 8 ? " " : "  pads: ", pad_rgb[i][0], pad_rgb[i][1], pad_rgb[i][2],
+                       i % 8 == 7 ? "\n" : "");
+#endif
         } else if (!strcmp(cmd, "strum")) {          /* strum A B [MS]: a finger across the white keys */
             int x = atoi(a), y = atoi(b), gap = c[0] ? atoi(c) : 25, s = y >= x ? 1 : -1;
             for (;; x += s) {

@@ -273,7 +273,7 @@ const char *en_chord_name(const int *pcs, int n, char *buf)
 }
 
 /* ------------------------------------------------------------ commands --- */
-enum { C_SET, C_POOL, C_PLAY, C_NEXT, C_FREEZE, C_SEED, C_PANIC, C_CLOCK, C_REGROW };
+enum { C_SET, C_POOL, C_PLAY, C_NEXT, C_FREEZE, C_SEED, C_PANIC, C_CLOCK, C_REGROW, C_BELL };
 #define QN 64u
 static uint32_t q[QN];
 static volatile uint32_t q_w, q_r;
@@ -295,6 +295,9 @@ void en_seed(uint32_t s) { post(C_SEED, 0, (int)(s & 0xFFFFu)); }
 void en_panic(void) { post(C_PANIC, 0, 0); }
 void en_clock(int msg) { post(C_CLOCK, msg, 0); }
 void en_regrow(void) { post(C_REGROW, 0, 0); }
+#if BOARD_SMK37
+void en_bell(int off, int vel) { post(C_BELL, off < 0 ? 0 : off > 15 ? 15 : off, vel < 1 ? 1 : vel > 127 ? 127 : vel); }
+#endif
 
 /* -------------------------------------------------------------- state --- */
 volatile uint8_t en_playing, en_frozen, en_ext;
@@ -770,6 +773,25 @@ static void bell_voice(int l, int n, float vel, int32_t wait)
     en_loop_glow[l] = 1.0f;
     midi(0x91, (uint32_t)n, (uint32_t)(vel * 110.0f));
 }
+
+#if BOARD_SMK37
+static void pad_bell(int off, int vel)          /* en_bell: in loop 1's register (G4), loop (off % 4)'s shade */
+{
+    const int reg = 67, root = par[P_ROOT];
+    int l = off & 3, d = deg + off, n, base;
+    float g = en_loop_glow[l];
+    if (!nsteps)
+        return;
+    base = reg - ((reg - root) % 12 + 12) % 12;
+    n = base + steps[d % nsteps] + 12 * (d / nsteps) + 12 * par[P_BOCT];
+    while (n > 103)
+        n -= 12;
+    while (n < 36)
+        n += 12;
+    bell_voice(l, n, 0.25f + 0.75f * (float)vel * (1.0f / 127.0f), 0);
+    en_loop_glow[l] = g;                         /* the loop's own light stays its own */
+}
+#endif
 
 static void bell_ring(int l, int slot)
 {
@@ -1424,6 +1446,9 @@ static void drain(void)
             break;
         case C_PANIC: quiet(); break;
         case C_REGROW: regrow(); break;
+#if BOARD_SMK37
+        case C_BELL: pad_bell(a, b); break;
+#endif
         }
     }
 }

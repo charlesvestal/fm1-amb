@@ -47,3 +47,21 @@ enum { OBJ_PROJ, OBJ_PANEL, OBJ_NOBJ };
 /* audio load in % of the render budget, and xruns since boot (device: from the ISR) */
 uint32_t plat_cpu_pct(void);
 uint32_t plat_xruns(void);
+
+#if defined(BOARD_SMK37) && BOARD_SMK37
+/* The SMK-37 build: the M-Vave SMK-37's controls beyond the FM-1's (plat_fm1.c over hal/smk_input.h). plat_keys()
+ * above is the keybed's F3..G5, the FM-1's 27 keys; the pads are not keys here. Pads are numbered as the hardware:
+ * 0..7 the top row, 8..15 the bottom row, left to right. */
+#define SMK_NKEYBED 37                 /* C3 .. C6 */
+#define SMK_NPADS 16
+enum { SB_KNOB_BANK, SB_FADER_BANK, SB_LEFT, SB_RIGHT, NSB };   /* the four buttons the FM-1 has not */
+uint32_t plat_smk_buttons(void);       /* held: bit SB_* */
+void plat_smk_leds(uint32_t lit);      /* their LEDs, bit SB_* (before plat_leds) */
+uint64_t plat_keybed(void);            /* keybed keys held: bit k = key k (0 = C3) */
+uint64_t plat_keybed_hits(void);       /* keybed presses since the last call */
+uint32_t plat_pad_hits(void);          /* pad presses since the last call: bit p = pad p */
+int plat_pad_vel(int pad);             /* velocity 1..127 of pad p's last press */
+int plat_fader(int i);                 /* fader 0..3: 0..127, -1 while the readings settle */
+int plat_wheels(int32_t *pitch, int32_t *modw);   /* 1 = new values: pitch -127..127 (0 at rest), mod 0..127 */
+void plat_pad_rgb(int pad, uint8_t r, uint8_t g, uint8_t b);   /* pad p's LED */
+#endif

@@ -1,0 +1,86 @@
+# The SMK-37 build: all 37 keys are the scale, the pads ring bells, the picker (KNOB BANK), the fader banks,
+# the wheels, < and >
+wait 300
+expect playing 1
+expect pool 0x6AD
+# D Dorian. C3 (keybed key 0) is C, the seventh: out; C6 (key 36) puts it back
+kbkey 0
+expect pool 0x2AD
+kbkey 36
+expect pool 0x6AD
+# the middle keys as on the FM-1: F#3 in and out
+tapkey 1
+expect pool 0x6BD
+tapkey 1
+expect pool 0x6AD
+wait 6000
+shot garden.png
+pads
+# a pad rings a bell: the bottom row's first pad is the chord's root
+pad 8 90
+expect padg8 >100
+wait 1500
+pads
+# the picker: the top row the pieces, the bottom row the modes
+sbtn KNOB_BANK
+expect picker 1
+expect smkleds 1
+shot picker.png
+pad 2
+expect piece 2
+pad 9
+expect par20 1
+sbtn KNOB_BANK
+expect picker 0
+# a PRESETS turn shows it for a moment
+turn PRESET 1
+expect piece 3
+expect picker 1
+wait 4000
+expect picker 0
+# the faders: bank B, the space; a fader takes over once it moves
+sbtn FADER_BANK
+expect fbank 1
+expect fcard 1
+expect smkleds 2
+fader 0 127
+expect par8 100
+fader 2 0
+expect par10 0
+shot faders.png
+wait 2000
+expect fcard 0
+# back to bank A: the first reading after a bank change only sets where the fader is
+sbtn FADER_BANK
+sbtn FADER_BANK
+expect fbank 0
+expect smkleds 0
+fader 0 0
+expect par0 0
+fader 0 64
+expect par0 50
+# one card at a time: KNOB BANK closes the fader card, FADER BANK the picker
+sbtn KNOB_BANK
+expect fcard 0
+expect picker 1
+sbtn FADER_BANK
+expect picker 0
+expect fcard 1
+# the wheels add, and do not change what is saved
+wheel pitch 127
+wheel mod 127
+wait 200
+expect par8 100
+expect par12 60
+wheel pitch 0
+wheel mod 0
+# < > the pages, as SELECT
+tap HOME
+sbtn RIGHT
+expect view 1
+sbtn RIGHT
+expect view 2
+sbtn LEFT
+sbtn LEFT
+sbtn LEFT
+expect view 0

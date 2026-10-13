@@ -28,6 +28,9 @@
  * elsewhere. Float only, no libm: fastmath.h. */
 #pragma once
 #include <stdint.h>
+#ifndef BOARD_SMK37
+#define BOARD_SMK37 0                  /* 1: the M-Vave SMK-37 build (tools/build.py --board smk37) */
+#endif
 
 #define EN_SR 44100.0f
 #define EN_NLOOP 4                     /* bell tape loops */
@@ -73,6 +76,11 @@ void en_freeze(int on);
 void en_seed(uint32_t s);                      /* stir some entropy into the generators */
 void en_panic(void);                           /* everything quiet, now */
 void en_regrow(void);                          /* a new piece: fresh loops, the home chord */
+#if BOARD_SMK37
+/* The SMK-37 build: a bell from a pad. off: scale steps above the chord's root (as a loop's notes; 0..15), in
+ * the bells' middle register and octave; vel 1..127. It rings in loop (off % 4)'s shade, outside the loops. */
+void en_bell(int off, int vel);
+#endif
 /* MIDI clock in (as FoMni): ticks drive the 1/16 grid (6 a step) while they keep coming */
 enum { EN_CLK_TICK, EN_CLK_START, EN_CLK_CONTINUE, EN_CLK_STOP };
 void en_clock(int msg);
