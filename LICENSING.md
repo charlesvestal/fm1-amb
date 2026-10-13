@@ -14,6 +14,7 @@ your recipients its complete corresponding source under the same licence.
 | Dattorro's plate reverb in `firmware/src/dsp/amb.c` | from [FoMni](https://github.com/charlesvestal/fm1-fomni) | GPL-3.0-only |
 | The idea of a browser emulator for FM-1 firmware (`web/emu/`) | [Groove OS](https://www.groove-os.com/) by Peter Gombos, whose site runs its firmware in the browser; no code from it | credit only |
 | Everything else in `firmware/src/{app,dsp}`, `tests/` | AMB-1 | GPL-3.0-only |
+| The M-Vave SMK-37 port: `firmware/hal/smk_input.h`, `firmware/hal/fm1_flash_map.h`, the code behind `BOARD_SMK37`, `tests/smk_*`, `tests/scenarios/smk37/`, `web/test_web.mjs` | the SMK-37 board layer, adapted for AMB-1 (authors in the files' headers) | GPL-3.0-only |
 
 ## Third-party material
 
@@ -26,7 +27,7 @@ your recipients its complete corresponding source under the same licence.
 ## Trademarks
 
 "Felucca" and "Hügelton Instruments" are names of Hügelton Instruments.
-"M-VAVE" and "FM-1" are trademarks of their respective owners. AMB-1 is independent firmware; it is
+"M-VAVE", "FM-1" and "SMK-37" are trademarks of their respective owners. AMB-1 is independent firmware; it is
 not affiliated with, endorsed by or supported by any of them.
 
 ## Radio
