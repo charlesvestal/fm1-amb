@@ -1,5 +1,5 @@
 /* SPDX-License-Identifier: GPL-3.0-only
- * SMK-37 port: Copyright (C) 2026 M. Geisler (genkigenki/makkuro) <mcgeisler@gmail.com> */
+ * SMK-37 port: Copyright (C) 2026 M. Geisler (genkigenki/makkuro) */
 /* SMK-37 Pro flash map (build with -DBOARD_SMK37=1):
  * every 4 KiB sector of the 1 MiB part through the app's allow-list (FL_RANGE_OK / FL_GUARD, fm1_flash_map.h)
  * and the update loader's (loader.c): none of them may ever reach the head 0x0-0x3FFF, BTIF / USRTRIM

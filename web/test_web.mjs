@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
-// SMK-37 port: Copyright (C) 2026 M. Geisler (genkigenki/makkuro) <mcgeisler@gmail.com>
+// SMK-37 port: Copyright (C) 2026 M. Geisler (genkigenki/makkuro)
 //
 // Node checks of the web installer library (no browser, no hardware). Run from the repo root:
 //   node web/test_web.mjs
