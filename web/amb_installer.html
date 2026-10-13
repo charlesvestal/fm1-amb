@@ -94,6 +94,8 @@ const TEXT = {
     error: "エラー: ",
     denied: "MIDI（SysEx）の使用が許可されませんでした。アドレスバーのサイト設定で MIDI を許可して、もう一度押してください。",
     notfound: "FM-1 が見つかりません。USB ケーブル（データ通信用か）を確かめ、MIDI を使う他のアプリを閉じてから、もう一度押してください。",
+    other: "このキーボードは ChanceTheMaker の SMK ファームウェア（Felucca SMK、Sloop SMK、Melodee SMK、Doom）のどれかで動いています。それらは専用のアップデーターを持ち、自分のパッケージしか受け付けないため、ここからは上書きインストールできません。何も書き込んでいません。",
+    foreign: "キーボードは別のファームウェアのアップデートモードです。何も書き込んでいません。そのファームウェアのアップデーターで完了させてください: ",
     model: "接続されている機器は FM-1 ではありません。",
     lost: "USB の接続が切れました。挿し直してもう一度押してください。",
     noloader: "書き込みモードの FM-1 が見つかりません。USB を挿し直してもう一度押してください（終わるまで書き込みモードのままです）。",
@@ -128,6 +130,8 @@ const TEXT = {
     error: "Error: ",
     denied: "MIDI (SysEx) access was not allowed. Allow MIDI in the site settings (address bar) and press Install again.",
     notfound: "FM-1 not found. Check the USB cable (a data cable), close other apps that use MIDI, and press Install again.",
+    other: "This keyboard runs one of ChanceTheMaker's SMK firmwares (Felucca SMK, Sloop SMK, Melodee SMK, Doom). They have their own updater, which takes only their packages, so these firmwares cannot be installed over them from here. Nothing was written.",
+    foreign: "The keyboard is in the update mode of another firmware: nothing was written. Finish that update with its own updater: ",
     model: "The connected device is not an FM-1.",
     lost: "The USB connection was lost. Replug it and press Install again.",
     noloader: "The FM-1 in update mode was not found. Replug the USB cable and press Install again (it stays in update mode until it is finished).",
@@ -211,13 +215,13 @@ async function run(img, product, isStock) {
     const ota = await up.find((id) => /^ota-/i.test(id.model));
     if (ota) {
       ota.link.close();
-      sayK((await up.resume(img, step)) ? (isStock ? "stockdone" : "done") : "stopped");
+      sayK((await up.resume(img, step, isStock ? { product } : { package: product, anyModel: true })) ? (isStock ? "stockdone" : "done") : "stopped");
     } else {
-      await up.install(img, product, step);
+      await up.install(img, product, step, !isStock);
     }
   } catch (e) {
     if (isStock && e && e.code === "mismatch") { $("bar").value = 100; sayK("stockdone"); }   /* stock names itself its own way */
-    else if (e && e.code && TEXT[lang][e.code]) sayK(e.code, e.detail || "");
+    else if (e && e.code && TEXT[lang][e.code]) sayK(e.code, e.code === "other" ? "" : e.detail || "");
     else sayK("error", e && e.message);
     log(String(e && e.stack || e));
   }

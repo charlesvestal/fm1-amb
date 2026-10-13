@@ -50,6 +50,22 @@ connections when many containers start at once.
 Build option: `EN_CDC=1` adds Felucca's USB serial function (off by default: one plain
 MIDI interface).
 
+### The M-Vave SMK-37
+
+```
+BOARD=smk37 ./build.sh            # or: ./build.sh --board smk37
+```
+
+builds `build/amb-smk37.fwsc` (identity `SMK-37 Pro_700`; `--release X.Y` gives `amb-smk37-X.Y.fwsc`,
+`SMK-37 Pro_7XXYYZZ`). `MODEL=elite` or `MODEL=mke` builds the same firmware under the SMK-37 Elite's or the
+MKE-P37's model name (`build/amb-smk37-elite.fwsc`, identity `SMK-37 Elite_700`; `build/amb-smk37-mke.fwsc`,
+`MKE-P37_700`), so M-Vave's updater still takes that unit's factory package; the Starrykey 37 Play uses the
+default build. Everything for the SMK-37 sits behind `BOARD_SMK37` (`-DBOARD_SMK37=1` for the app and the
+update loader); without `BOARD` the FM-1 build is unchanged. Options for the SMK build: `EN_LCD_BAUD=0..15` (the
+LCD SPI divider; default 4 = 12 MHz, the stock firmware's), `FELUCCA_DATA_FAMILY` / `FELUCCA_DATA_UNTAGGED_OK`
+(the store owner tag; keep the defaults `AMB1` and `0`). Both boards write the same files in `build/`: build the
+FM-1 last before `tests/run_tests.sh`. See [SMK37.md](SMK37.md) for the controls and the install.
+
 The build also generates `build/gen/` (the font). It fails if a soft-double routine is linked
 (a `double` crept in) and checks the image, RAM and pool sizes.
 
@@ -59,13 +75,16 @@ The build also generates `build/gen/` (the font). It fails if a soft-double rout
 tests/run_tests.sh
 ```
 
-Runs, on the build machine: the maths library against libm; the instrument (`tests/host/amb_test.c`:
+Runs, on the build machine (after an FM-1 `./build.sh`, with `AC79_SDK` set for the update-path and
+SMK-37 package tests): the maths library against libm; the instrument (`tests/host/amb_test.c`:
 Euclidean patterns, scales and chords, voice leading, the render's levels, drift, evolving loops, freeze); flash
 storage; Felucca's update-path tests against `build/amb.fwsc`; and the whole app in the simulator
-(`tests/scenarios/*.amb`), with its screenshots and audio in `build/scenarios/`.
+(`tests/scenarios/*.amb`), with its screenshots and audio in `build/scenarios/`; the SMK-37 build's
+flash map, packages and update path, and its controls in the simulator (`tests/scenarios/smk37/*.amb`).
 
 `host/build_host.sh` builds the simulator alone; `build/host/amb_host SCRIPT OUTDIR` runs one
-script (the command list is at the top of `host/amb_host.c`).
+script (the command list is at the top of `host/amb_host.c`). `host/build_host.sh smk37` builds the SMK-37
+build's (`build/host/amb_host_smk37`).
 
 ## Install
 
