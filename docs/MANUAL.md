@@ -45,12 +45,13 @@ updater, M-UPGRADE, works too.
 
 <details><summary>Install from the command line</summary>
 
-Download the firmware file (for example `amb-0.9.fwsc`) from the
-[releases page](https://github.com/charlesvestal/fm1-amb/releases), get the AMB-1 source from GitHub,
-install Python 3 with `pip3 install mido python-rtmidi`, and run:
+Download the firmware file (for example `amb-1.0.fwsc`) from the
+[releases page](https://github.com/charlesvestal/fm1-amb/releases), get the AMB-1 source from GitHub
+(`git clone --recursive https://github.com/charlesvestal/fm1-amb`), install Python 3 with
+`pip3 install mido python-rtmidi`, and run:
 
 ```
-python3 tools/fm1_install.py amb-0.9.fwsc
+python3 base/tools/fm1_install.py amb-1.0.fwsc
 ```
 
 </details>
@@ -338,7 +339,7 @@ you already have.
 Open Terminal, paste this line and press Return:
 
 ```
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/charlesvestal/fm1-amb/main/tools/fm1_rescue.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/hugelton/felucca-bsp/main/tools/fm1_rescue.sh)"
 ```
 
 1. If a window asks to install the command line developer tools, click Install. When it has
@@ -408,9 +409,9 @@ firmware, you must also share its source code.
 - The reverb is Jon Dattorro's plate ("Effect Design, Part 1", JAES 1997), by way of
   [FoMni-1](https://charlesvestal.github.io/fm1-fomni/).
 - The Euclidean rhythms are Godfried Toussaint's reading of Bjorklund's algorithm.
-- The platform (hardware layer, USB, update loader, installer and storage) is from
-  **Felucca** by Leo Kuroshita, Hügelton Instruments, by way of
-  [X0X](https://charlesvestal.github.io/fm1-x0x/).
+- The platform (hardware layer, USB, update loader, installer and storage) is
+  [fm1-base](https://github.com/charlesvestal/fm1-base) and [felucca-bsp](https://github.com/hugelton/felucca-bsp),
+  from **Felucca** by Leo Kuroshita, Hügelton Instruments.
 - The idea of running FM-1 firmware in the browser comes from [Groove OS](https://www.groove-os.com/).
 - The fonts are Barlow Semi Condensed and Terminus (SIL Open Font License).
 
