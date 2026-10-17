@@ -31,8 +31,20 @@ input[type="range"] { accent-color: var(--river-2); width: 100%; margin: 0; }
 input[type="checkbox"] { accent-color: var(--river-2); }
 .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 8px 0; }
 #wrap { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; }
-#left { flex: 1 1 340px; max-width: 520px; }
+#left { flex: 1 1 360px; max-width: 540px; }
 #right { flex: 1 1 340px; }
+/* the pieces as an album's tracks, listed beside the garden display */
+#stage { display: flex; gap: 14px; align-items: flex-start; }
+#tracks { flex: 0 0 auto; }
+#tracks .cap { text-transform: uppercase; letter-spacing: .06em; font-size: 13px; margin: 0 0 4px; }
+#tracks button { display: flex; align-items: baseline; gap: .6em; width: 100%; white-space: nowrap;
+  background: none; border: 0; border-bottom: 1px solid var(--green-3); padding: 5px 4px; margin: 0; text-align: left; }
+#tracks button:first-of-type { border-top: 1px solid var(--green-3); }
+#tracks .num { color: var(--river-2); font-variant-numeric: tabular-nums; min-width: 1.1em; }
+#tracks button:hover { background: var(--green-1); }
+#tracks button[aria-current="true"] { background: var(--river); }
+#tracks button[aria-current="true"] .num { color: var(--ink); }
+#display { flex: 1 1 0; min-width: 0; }
 canvas { display: block; width: 100%; aspect-ratio: 1 / 1.1; cursor: pointer; touch-action: manipulation; }
 #msg { min-height: 1.4em; margin: 2px 0; }
 fieldset { border: 1px solid var(--ink); margin: 0 0 10px; padding: 4px 10px 8px; }
@@ -59,7 +71,6 @@ td.v { width: 4.5em; text-align: right; font-variant-numeric: tabular-nums; }
 <hr>
 
 <div class="bar">
-  <label for="piece">Piece</label> <select id="piece"></select>
   <span id="keyLine"></span>
 </div>
 <div class="bar">
@@ -75,8 +86,13 @@ td.v { width: 4.5em; text-align: right; font-variant-numeric: tabular-nums; }
 
 <div id="wrap">
   <div id="left">
-    <canvas id="ring" role="img" aria-label="The garden: the scale as a ring of twelve notes, the bell loops around it, the pulse below."></canvas>
-    <p id="msg" role="status"></p>
+    <div id="stage">
+      <nav id="tracks" aria-label="Pieces"><p class="cap" aria-hidden="true">Pieces</p></nav>
+      <div id="display">
+        <canvas id="ring" role="img" aria-label="The garden: the scale as a ring of twelve notes, the bell loops around it, the pulse below."></canvas>
+        <p id="msg" role="status"></p>
+      </div>
+    </div>
   </div>
   <div id="right"></div>
 </div>
@@ -450,11 +466,23 @@ function build() {
 }
 const keyLine = () => `${note(par(P.ROOT))} ${modeName()}, ${par(P.TEMPO)} bpm`;
 const spokenKey = () => `${sayNote(note(par(P.ROOT)))} ${MODE_WORDS[modeName()] || modeName()}, ${par(P.TEMPO)} beats a minute`;
+function buildTracks() {
+  const el = $("tracks");
+  if (!el.querySelector("button"))
+    for (let i = 0; i < W.app_npieces(); i++) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.innerHTML = `<span class="num" aria-hidden="true">${i + 1}</span><span class="ttl">${pieceName(i)}</span>`;
+      b.setAttribute("aria-label", `${i + 1}. ${pieceName(i)}`);
+      b.onclick = () => choosePiece(i);
+      el.appendChild(b);
+    }
+  el.querySelectorAll("button").forEach((b, i) => {
+    if (i === S.piece) b.setAttribute("aria-current", "true"); else b.removeAttribute("aria-current");
+  });
+}
 function refresh() {
-  const ps = $("piece");
-  if (!ps.options.length)
-    for (let i = 0; i < W.app_npieces(); i++) { const o = document.createElement("option"); o.value = i; o.textContent = pieceName(i); ps.appendChild(o); }
-  ps.value = S.piece;
+  buildTracks();
   $("keyLine").textContent = keyLine();
   $("colour").value = par(P.PADTONE);
   $("octVal").textContent = ptext(P.BOCT, par(P.BOCT));
@@ -574,7 +602,6 @@ cv.addEventListener("click", (e) => {
     send({ t: "next" });
     if (ready) tell(playing ? "Next chord, on the bar" : "Next chord");
   };
-  $("piece").onchange = (e) => choosePiece(+e.target.value);
   $("colour").onchange = (e) => { setPar(P.PADTONE, +e.target.value); refresh(); };
   const oct = (d) => { setPar(P.BOCT, par(P.BOCT) + d); refresh(); msg(`Bells octave ${ptext(P.BOCT, par(P.BOCT))}`); };
   $("octDn").onclick = () => oct(-1);
