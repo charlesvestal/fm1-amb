@@ -1,4 +1,5 @@
-/* SPDX-License-Identifier: GPL-3.0-only */
+/* SPDX-License-Identifier: MPL-2.0
+ * Copyright (C) 2026 Charles Vestal */
 /* The engine for the web app: dsp/amb.c alone, the same code the FM-1 runs, behind a few exports.
  * One instance runs in the AudioWorklet (en_render); another on the page answers the pure questions
  * (parameter names and texts, chord names, the pieces' recipes). No device, no panel, no screen.

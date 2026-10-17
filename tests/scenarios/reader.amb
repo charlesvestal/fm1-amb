@@ -62,7 +62,7 @@ said MODE Dorian
 turn PRESET 1
 said PIECE Departures, C# Ionian, tempo 60
 wait 300
-said_none Level
+unsaid Level
 turn PRESET -1
 said PIECE Garden, D Dorian, tempo 74
 wait 300
@@ -74,11 +74,11 @@ said FREEZE OFF
 tap PLAY
 said RESTING
 wait 300
-said_none GROWING
+unsaid GROWING
 tap PLAY
 said GROWING
 wait 300
-said_none RESTING
+unsaid RESTING
 tap OCT+
 said BELL OCTAVE +1
 tap OCT-

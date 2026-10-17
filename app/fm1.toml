@@ -1,0 +1,16 @@
+# AMB-1's build settings (fm1-base's tools/build.py: ./build.sh)
+name = "AMB"                   # the build's files: amb.fwsc, amb-X.Y.fwsc
+id_prefix = "FM-1_7"           # package identity: dev FM-1_700, releases FM-1_7XXYYZZ (as AMB-1 0.9)
+usb_manufacturer = "AMB-1"
+usb_product = "AMB-1 FM-1"
+ble = false                    # AMB-1 never uses the radio
+usb_audio_in = true            # the music recordable over USB
+usb_audio_out = false
+words = "words.tsv"
+include = ["dsp"]
+o2 = ["dsp/amb.c"]             # the engine, at -O2
+# the site
+tagline = "A generative ambient machine for the FM-1"
+repo = "https://github.com/charlesvestal/fm1-amb"
+licence = "MPL-2.0"
+credits = "Built on fm1-base and felucca-bsp, from Felucca by Leo Kuroshita (Hügelton Instruments)."

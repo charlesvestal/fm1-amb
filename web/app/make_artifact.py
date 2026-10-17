@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
-# SPDX-License-Identifier: GPL-3.0-only
-"""The web app as a private claude.ai Artifact: build/app (web/app/build.sh) -> build/app-artifact/
+# SPDX-License-Identifier: MPL-2.0
+# Copyright (C) 2026 Charles Vestal
+"""The web app as a private claude.ai Artifact: app/build/app (web/app/build.sh) -> app/build/app-artifact/
 {index.html, worklet.js}. The page loses its document wrapper (the Artifact host adds one); amb.wasm
-goes into it as base64, so nothing is fetched. build/app itself is the static site (charles.pizza/amb, web/app/publish.sh)."""
+goes into it as base64, so nothing is fetched. app/build/app itself is the static site (charles.pizza/amb, web/app/publish.sh)."""
 import base64
 import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-APP, OUT = ROOT / "build/app", ROOT / "build/app-artifact"
+APP, OUT = ROOT / "app/build/app", ROOT / "app/build/app-artifact"
 OUT.mkdir(parents=True, exist_ok=True)
 s = (APP / "index.html").read_text()
 s = re.sub(r"<!doctype html>\s*<html[^>]*>\s*<head>\s*", "", s)

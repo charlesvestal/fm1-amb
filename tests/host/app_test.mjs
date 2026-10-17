@@ -1,4 +1,5 @@
-// SPDX-License-Identifier: GPL-3.0-only
+// SPDX-License-Identifier: MPL-2.0
+// Copyright (C) 2026 Charles Vestal
 // The web app's engine (build/app/amb.wasm) in Node: the pieces' recipes, the parameters' texts, a minute
 // of a piece rendered (sound, no NaN, bounded), a piece change, the state the page draws.
 import fs from "fs";

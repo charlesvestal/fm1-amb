@@ -1,4 +1,5 @@
-// SPDX-License-Identifier: GPL-3.0-only
+// SPDX-License-Identifier: MPL-2.0
+// Copyright (C) 2026 Charles Vestal
 // The AMB-1 web app's audio: amb.wasm (the engine alone, as on the FM-1) in an AudioWorklet. The page
 // posts commands; each render quantum runs the engine for 128 frames; about 30 times a second, while
 // the page is on screen, the garden's state goes back to it for drawing. Nothing is allocated per

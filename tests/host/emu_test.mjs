@@ -1,4 +1,5 @@
-// SPDX-License-Identifier: GPL-3.0-only
+// SPDX-License-Identifier: MPL-2.0
+// Copyright (C) 2026 Charles Vestal
 // The browser build in Node: boot it, press a few keys, expect sound and screen frames.
 import fs from "fs";
 const wasm = fs.readFileSync(process.argv[2]);

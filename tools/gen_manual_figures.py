@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# SPDX-License-Identifier: GPL-3.0-only
+# SPDX-License-Identifier: MPL-2.0
+# Copyright (C) 2026 Charles Vestal
 """The manual's map of the controls, drawn (no photographs: M-VAVE's and Felucca's are not ours to use):
 
   docs/img/fm1-panel.svg   the FM-1 front panel, AMB-1's real screen in it, each control labelled with

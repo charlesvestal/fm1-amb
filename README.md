@@ -39,29 +39,29 @@ The [manual](https://charlesvestal.github.io/fm1-amb/manual/) has the rest.
 
 ## Building and testing
 
-The toolchain is the same as X0X's (see [BUILDING.md](BUILDING.md)):
+AMB-1 is an app on [fm1-base](https://github.com/charlesvestal/fm1-base) (`base/`, a git submodule); clone with
+`--recursive`. The toolchain and prerequisites are in [BUILDING.md](BUILDING.md):
 
 ```
-tests/run_tests.sh      # the instrument, the platform pieces, the app in a simulator, the web builds
-./build.sh              # build/amb.fwsc
-python3 tools/fm1_install.py build/amb.fwsc     # install it over USB
+sh tests/run_tests.sh                                  # the instrument, the app in a simulator, the web builds
+./build.sh                                             # app/build/amb.fwsc
+python3 base/tools/fm1_install.py app/build/amb.fwsc   # install it over USB
 ```
 
-`build/host/amb_host SCRIPT OUTDIR` runs the whole app on a computer from a script
-(`tests/scenarios/*.amb`), with audio and screenshots coming out. `web/emu/build.sh` builds the
-same code for the browser (the emulator); `web/app/build.sh` builds the engine alone into a web
-app for phone and desktop.
+`app/build/host/amb_host SCRIPT OUTDIR` runs the whole app on a computer from a script
+(`tests/scenarios/*.amb`), with audio and screenshots coming out. `./build.sh --web` builds the same code for the
+browser (the emulator); `web/app/build.sh` builds the engine alone into a web app for phone and desktop.
 
 ## Credits
 
 The idea comes from Brian Eno's generative music: *Music for Airports*' tape loops of unequal
 length, and the echo chain of *Discreet Music*. The reverb is Jon Dattorro's plate ("Effect Design,
 Part 1", JAES 1997), as in [FoMni-1](https://github.com/charlesvestal/fm1-fomni); the Euclidean
-rhythms are Godfried Toussaint's reading of Bjorklund's algorithm. The platform (hardware layer,
-USB, update loader, storage, installer) is [Felucca](https://github.com/hugelton/Felucca)'s by Leo
-Kuroshita (Hügelton Instruments), by way of [X0X](https://github.com/charlesvestal/fm1-x0x) and
-FoMni-1. The idea of running FM-1 firmware in the browser comes from
-[Groove OS](https://www.groove-os.com/). GPL-3.0-only; see [LICENSING.md](LICENSING.md).
+rhythms are Godfried Toussaint's reading of Bjorklund's algorithm. AMB-1 is built on
+[fm1-base](https://github.com/charlesvestal/fm1-base) and [felucca-bsp](https://github.com/hugelton/felucca-bsp),
+from [Felucca](https://github.com/hugelton/Felucca) by Leo Kuroshita (Hügelton Instruments). The idea of running
+FM-1 firmware in the browser comes from [Groove OS](https://www.groove-os.com/). MPL-2.0 (0.9 and earlier:
+GPL-3.0-only); see [LICENSING.md](LICENSING.md).
 
 M-VAVE and FM-1 are trademarks of their owners. AMB-1 is not affiliated with M-VAVE, Brian Eno or
 Hügelton Instruments.
