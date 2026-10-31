@@ -722,11 +722,11 @@ const log = (t) => {
   if (atEnd) el.scrollTop = el.scrollHeight;
 };
 let image = null, boot = null;
-const meta = {"version": "1.3", "product": "FM-1_7010300", "pkg": "../firmware/amb-1.3.fwsc"};
+const meta = {"version": "1.3", "product": "FM-1_7010300", "pkg": "../firmware/amb-1.3.fwsc", "backup": false, "boot": {"pkg": "../firmware/m-bootloader-1.2.fwsc", "version": "1.2", "sha256": "0e89141f52d1f2d62198d4f69147a2c15c8360806e64d48002990a6fdab6d6dd"}};
 /* the firmware's own steps around an install (its site's install_app script, or none): before(midi, ui) runs before
    anything is written, may ask (ui.ask) and returns its state, or false to stop there; after(midi, ui, state) once
    the new firmware has started (it waits for it itself). A failure in after is said, the install stays done */
-const APP = /*APP*/;
+const APP = null;
 const appUi = {
   say: (txt) => say(txt), log: (txt) => log(txt),
   progress: (pct) => { $("bar").value = Math.max(0, Math.min(100, pct)); },
