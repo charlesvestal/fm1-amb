@@ -16,6 +16,7 @@
 
 The package must be a release build (./build.sh --release X.Y): its identity, FM-1_7XXYYZZ, is what
 the installer checks the download against and what the FM-1 reports after the install."""
+import hashlib
 import html
 import json
 import re
@@ -27,7 +28,7 @@ from pathlib import Path
 SRC = Path(__file__).resolve().parents[1]
 BASE = SRC / "base"
 sys.path.insert(0, str(BASE / "tools"))
-from make_site import product_of, read_conf, strip_module  # noqa: E402  (fm1-base's: the package format)
+from make_site import MBOOT_VERSION, product_of, read_conf, strip_module  # noqa: E402  (fm1-base's: the package format)
 
 REPO = "https://github.com/charlesvestal/fm1-amb"
 
@@ -129,14 +130,25 @@ def main(pkg, version, out):
     page = (BASE / "web" / "installer.html").read_text(encoding="utf-8")
     lib = strip_module((BASE / "web" / "fm1pkg.js").read_text(encoding="utf-8")) + "\n" + \
         strip_module((BASE / "web" / "fm1ota.js").read_text(encoding="utf-8"))
-    meta = json.dumps({"version": version, "product": product, "pkg": "../firmware/" + name})
-    for mark in ("/*LIB*/", "/*META*/"):
+    # m-bootloader (MIT), which the installer offers to install after AMB-1, with its licence (as fm1-base's make_site)
+    boot = BASE / "web" / "m-bootloader" / f"fm1-uboot-{MBOOT_VERSION}.fwsc"
+    boot_name = f"m-bootloader-{MBOOT_VERSION}.fwsc"
+    shutil.copy(boot, out / "firmware" / boot_name)
+    shutil.copy(BASE / "web" / "m-bootloader" / "LICENSE", out / "firmware" / "m-bootloader-LICENSE.txt")
+    meta = json.dumps({"version": version, "product": product, "pkg": "../firmware/" + name,
+                       "backup": bool(conf.get("backup")),
+                       "boot": {"pkg": "../firmware/" + boot_name, "version": MBOOT_VERSION,
+                                "sha256": hashlib.sha256(boot.read_bytes()).hexdigest()}})
+    for mark in ("/*LIB*/", "/*META*/", "/*APP*/"):
         if page.count(mark) != 1:
             raise SystemExit(f"base/web/installer.html must contain {mark} once")
     for key, val in (("NAME", "AMB-1"), ("REPO", REPO), ("REPO_SHORT", re.sub(r"^https?://", "", REPO)),
                      ("LICENSE", conf.get("licence", "MPL-2.0")), ("CREDITS", " " + conf.get("credits", ""))):
         page = page.replace("{{" + key + "}}", val)
-    (out / "install" / "index.html").write_text(page.replace("/*LIB*/", lib).replace("/*META*/", meta), encoding="utf-8")
+    # the firmware's own steps around an install (fm1.toml install_app; base/web/installer.html APP): AMB-1 has none
+    app_js = (SRC / "app" / conf["install_app"]).read_text(encoding="utf-8") if conf.get("install_app") else "null"
+    (out / "install" / "index.html").write_text(page.replace("/*LIB*/", lib).replace("/*META*/", meta)
+                                                .replace("/*APP*/", app_js), encoding="utf-8")
     # the manual (a complete page; its images beside it)
     subprocess.run([sys.executable, str(BASE / "tools" / "manual_html.py"), str(SRC / "docs" / "MANUAL.md"),
                     str(out / "manual" / "index.html"), "--name", "AMB-1", "--repo", REPO,
