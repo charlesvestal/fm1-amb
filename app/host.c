@@ -4,8 +4,9 @@
  * "expect", its command, a reboot and the screen reader's dump.
  *
  * AMB-1's checks: playing frozen view piece pool dirty sixteenths ext pad_level bass_level chordroot chordN loopnotes
- * parN (fm1-base's own: store_writes clocks_out midi_out peak_db_max peak_db_min). Its command: storev3 N (the
- * project as AMB-1 0.9 before the layer pages wrote it, format 3, the playing piece's Pad at N). */
+ * parN battery (fm1-base's own: store_writes clocks_out midi_out peak_db_max peak_db_min). Its commands: storev3 N
+ * (the project as AMB-1 0.9 before the layer pages wrote it, format 3, the playing piece's Pad at N); battery N (the
+ * battery read as N, plat.h's plat_battery: -1..4; "battery off" the simulator's own, full). */
 
 int app_expect(const char *what, int *got)
 {
@@ -20,6 +21,8 @@ int app_expect(const char *what, int *got)
         g = proj.piece;
     else if (!strcmp(what, "pool"))               /* the scale, relative to the root (hex ok) */
         g = proj.pool;
+    else if (!strcmp(what, "battery"))
+        g = batt();
     else if (!strcmp(what, "dirty"))
         g = ui.dirty;
     else if (!strcmp(what, "sixteenths"))
@@ -51,6 +54,10 @@ int app_expect(const char *what, int *got)
 int app_host_cmd(const char *cmd, const char *a, const char *b, const char *c, const char *d)
 {
     (void)b, (void)c, (void)d;
+    if (!strcmp(cmd, "battery")) {               /* battery N: plat_battery as N (-1..4), "battery off" its own */
+        batt_host = (int8_t)(strcmp(a, "off") ? atoi(a) : -2);
+        return 1;
+    }
     if (!strcmp(cmd, "storev3")) {
         static project_v3_t o;
         int i, k;

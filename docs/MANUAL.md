@@ -117,8 +117,11 @@ another button puts the card away; letting go after it does nothing else.
 ![The screen on the Pad page of the piece Voices: F Aeolian, tempo 56, the chord Fm7; LEVEL 85, SWELL 70, BRIGHT 67, COLOUR Voices](img/screen-voices.png "Voices, a piece with only the sung pad and a bass")
 
 - **Top line:** the piece, its root and mode. On the right, a slow beat light (a play triangle while
-  resting), the tempo (EXT when it follows MIDI clock) and a dot when there are unsaved changes.
-  Messages ("ADDED F#", "NEXT CHORD") show here for a moment.
+  resting), the tempo (EXT when it follows MIDI clock), a dot when there are unsaved changes, and the
+  battery. Messages ("ADDED F#", "NEXT CHORD") show here for a moment.
+- **The battery:** three bars when it's full, fewer as it runs down. At one bar or none it turns
+  red: time to charge. Plugged into a computer, it shows a lightning bolt instead. While it charges
+  from a wall charger, the bars read high.
 - **Top right of the garden:** a thin bar fills up on the way to the next chord; while frozen it
   says "held".
 - **The ring:** the twelve notes, C at the top. Notes in the scale are green, the chord's notes
@@ -293,8 +296,8 @@ and its key, the notes you add or take out, help cards, every message, and the c
 the garden moves on, in words: "E flat pentatonic minor", not "Eb Pent min".
 
 The page can speak with its own voice or pass everything to your own screen reader (VoiceOver,
-NVDA, JAWS, TalkBack). Press W to hear the whole screen again: the page, the piece, the chord and
-the scale. The FM-1 says nothing until the page connects, so a DAW on the same cable never sees it.
+NVDA, JAWS, TalkBack). Press W to hear the whole screen again: the page, the piece, the battery, the
+chord and the scale. The FM-1 says nothing until the page connects, so a DAW on the same cable never sees it.
 
 ---
 

@@ -622,16 +622,52 @@ static void tag(int32_t *x, const char *s, uint16_t bg, uint16_t fg)
     *x += w + 4;
 }
 
-/* the header: the piece in a tag, its root and mode; on the right, the tempo with a slow beat light
- * (a play triangle while resting) and a dot while there is something unsaved. Messages take its place
- * for a moment. */
+/* the battery (plat_battery): 0 (low) .. 3 bars, 4 a USB host powers the FM-1, -1 not read yet. The
+ * simulator's "battery N" (host.c) stands in for it */
+#ifdef PLAT_HOST
+static int8_t batt_host = -2;                  /* -2: plat_battery's */
+static int batt(void) { return batt_host > -2 ? batt_host : plat_battery(); }
+#else
+#define batt() plat_battery()
+#endif
+#define K_LOW RGB(196, 84, 52)                 /* the battery at one bar or none */
+#define BATT_W 20                              /* the body 18 wide and its nub */
+/* lying down at the header's right, its middle on the beat light's: three bars, rust at one or none; a
+ * bolt instead on USB power; nothing until it is read */
+static void draw_batt(int32_t x, int b)
+{
+    static const int8_t BOLT[7][2] = {{10, 2}, {9, 2}, {8, 2}, {7, 5}, {9, 2}, {8, 2}, {7, 2}};
+    uint16_t c = b <= 1 ? K_LOW : K_DIM;
+    int i;
+    cv_round(x, 9, 18, 10, 2, c);
+    cv_rect(x + 1, 10, 16, 8, K_BG);
+    cv_rect(x + 18, 12, 2, 4, c);
+    if (b == 4) {
+        for (i = 0; i < 7; i++)
+            cv_rect(x + BOLT[i][0], 10 + i, BOLT[i][1], 1, K_TEXT);
+        return;
+    }
+    for (i = 0; i < b && i < 3; i++)
+        cv_rect(x + 2 + i * 5, 11, 4, 6, b <= 1 ? K_LOW : K_PAD);
+}
+static const char *batt_words(int b)
+{
+    static const char *const W[5] = {"Battery low", "Battery one third", "Battery two thirds", "Battery full",
+                                     "On USB power"};
+    return b >= 0 && b <= 4 ? W[b] : 0;
+}
+
+/* the header: the piece in a tag, its root and mode; on the right, the battery, the tempo with a slow
+ * beat light (a play triangle while resting) and a dot while there is something unsaved. Messages take
+ * its place for a moment. */
 static void draw_header(void)
 {
     char t[24];
     int msg = plat_ms() < ui.msg_until;
     uint32_t h = hash(hash(hash(2166136261u, proj.piece | (uint32_t)proj.par[P_ROOT] << 8 | (uint32_t)proj.pool << 12),
                            en_playing | ui.dirty << 4 | (uint32_t)msg << 5 | (uint32_t)en_ext << 6 | (uint32_t)proj.par[P_MODE] << 8),
-                      (uint32_t)proj.par[P_TEMPO] | (ui.view == V_SETUP ? plat_cpu_pct() << 8 : 0u));
+                      (uint32_t)proj.par[P_TEMPO] | (ui.view == V_SETUP ? plat_cpu_pct() << 8 : 0u) |
+                      (uint32_t)(batt() + 1) << 24);
     if (msg)
         h = hash(hash(h, (uint32_t)ui.msg[0][0] << 8 | ui.msg[0][1]), ui.msg_until);
     if (en_playing)
@@ -645,6 +681,11 @@ static void draw_header(void)
         cv_text(x + 8, 6, &FONT_B, ui.msg[1], K_ACC);
     } else {
         int32_t x = 232, w;
+        if (batt() >= 0) {
+            x -= BATT_W;
+            draw_batt(x, batt());
+            x -= 6;
+        }
         if (ui.dirty) {                            /* unsaved */
             cv_round(x - 5, 12, 5, 5, 2, K_DIM);
             x -= 11;
@@ -678,8 +719,12 @@ static void draw_header(void)
         w = text_w(&FONT_B, piece_name(proj.piece)) + 12;   /* the piece, in a coral tag */
         cv_round(4, 4, w, 20, 6, K_TEXT);
         cv_text(10, 6, &FONT_B, piece_name(proj.piece), K_BG);
-        w = cv_text(w + 10, 8, &FONT_XS, EN_NOTE_NAME[proj.par[P_ROOT]], K_TEXT);
-        cv_text(w + 3, 8, &FONT_XS, mode_name(), K_DIM);
+        w += 10;                                  /* the root, then the mode, where they clear the right side */
+        if (w + text_w(&FONT_XS, EN_NOTE_NAME[proj.par[P_ROOT]]) + 4 <= x) {
+            w = cv_text(w, 8, &FONT_XS, EN_NOTE_NAME[proj.par[P_ROOT]], K_TEXT);
+            if (w + 3 + text_w(&FONT_XS, mode_name()) + 4 <= x)
+                cv_text(w + 3, 8, &FONT_XS, mode_name(), K_DIM);
+        }
     }
     cv_blit(0, 0);
 }
@@ -1103,6 +1148,10 @@ static void sp_page(int all)
         sp_int(plat_cpu_pct());
         sp_cat("%");
     }
+    if (batt_words(batt())) {
+        sp_cat(". ");
+        sp_cat(batt_words(batt()));
+    }
 }
 
 /* the garden: the chord and how far to the next, the scale from the root up ("F and F sharp": one letter's
@@ -1393,6 +1442,8 @@ static void speak_dump(void)
     proj = keep;
     sp_print("MSG", "Tempo EXT");
     sp_print("MSG", "Tempo 72");
+    for (x = 0; x <= 4; x++)                          /* the battery, at the end of WHERE's first part */
+        sp_print("WHERE", batt_words(x));
 }
 #endif
 
