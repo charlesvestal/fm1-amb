@@ -14,3 +14,11 @@ tagline = "A generative ambient machine for the FM-1"
 repo = "https://github.com/charlesvestal/fm1-amb"
 licence = "MPL-2.0"
 credits = "Built on fm1-base and felucca-bsp, from Felucca by Leo Kuroshita (Hügelton Instruments)."
+
+# firmware.json, for firmware hubs (fm1-base docs/FIRMWARE-JSON.md)
+author = "Charles Vestal"
+description = "AMB-1 turns the M-VAVE FM-1 into a generative ambient machine, inspired by Brian Eno's Music for Airports. It plays itself from the moment it's switched on: breathing voices, soft bells on tape loops of unequal length, a gliding bass and quiet Euclidean percussion, through a tape echo and a plate reverb. It has eight pieces, and it is an album as much as an instrument. You don't perform it, you tend it: pick a piece and a scale, take notes out, put them back, and let it grow."
+tags = ["ambient", "generative", "fm"]
+install = "https://charlesvestal.github.io/fm1-amb/install/"
+site = "https://charlesvestal.github.io/fm1-amb/"
+screenshot = "docs/img/screen-garden.png"
