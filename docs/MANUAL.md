@@ -1,12 +1,12 @@
 # AMB-1
 
-AMB-1 turns the M-VAVE FM-1 into a generative ambient machine, inspired by Brian Eno's
-*Music for Airports*. It plays itself from the moment it's switched on: breathing voices, soft
-bells on tape loops of unequal length, a gliding bass and quiet Euclidean percussion, all through
-a short echo, a long tape loop and a plate reverb. You don't perform it, you tend it: pick a piece
-and a scale, take notes out, put them back, and let it grow.
+AMB-1 turns your M-VAVE FM-1 into a generative ambient machine, inspired by Brian Eno's
+*Music for Airports*. Switch it on and it starts playing by itself. You'll hear breathing voices,
+soft bells on tape loops of different lengths, a gliding bass and quiet Euclidean percussion, all
+through a short echo, a long tape loop and a plate reverb. You don't perform it so much as tend
+it: pick a piece and a scale, take notes out, put them back, and let it grow.
 
-![A drawing of the FM-1 running AMB-1, each control labelled with what it does: the Controls section below says the same in words](img/fm1-panel.svg "The FM-1 (a drawing), running AMB-1, each control labelled")
+![A drawing of the FM-1 running AMB-1, each control labeled with what it does. The Controls section below says the same in words](img/fm1-panel.svg "The FM-1 (a drawing), running AMB-1, each control labeled")
 
 ---
 
@@ -29,15 +29,16 @@ and a scale, take notes out, put them back, and let it grow.
 
 ## 1. Install
 
-**Try it first:** the [AMB-1 emulator](https://charlesvestal.github.io/fm1-amb/emu/) runs the same
-code in the browser, with sound, played with the mouse, a touch screen or the keyboard.
+To try AMB-1 first, open the [AMB-1 emulator](https://charlesvestal.github.io/fm1-amb/emu/). It runs
+the same code in your browser, with sound, and you can play it with a mouse, a touch screen or the
+keyboard.
 
-**Install:** open the [web installer](https://charlesvestal.github.io/fm1-amb/install/) in Chrome or
-Edge, connect the FM-1 with a USB data cable and press Install. Don't unplug it while it's
-writing; when it finishes, the FM-1 restarts into AMB-1.
+To install it, open the [web installer](https://charlesvestal.github.io/fm1-amb/install/) in Chrome
+or Edge. Connect the FM-1 with a USB data cable and press Install. Don't unplug it while it's
+writing. When it's done, the FM-1 restarts into AMB-1.
 
-**Go back:** "Back to the stock firmware", at the bottom of the same page, puts M-VAVE's firmware
-back (download the FM-1 V15 file from the link there, choose it, press the button). M-VAVE's own
+To go back to M-VAVE's firmware, use "Back to the stock firmware" at the bottom of the same page.
+Download the FM-1 V15 file from the link there, choose it and press the button. M-VAVE's own
 updater, M-UPGRADE, works too.
 
 > Installing other firmware is at your own risk. If the FM-1 ever won't start, see
@@ -60,52 +61,53 @@ python3 base/tools/fm1_install.py amb-1.0.fwsc
 
 ## 2. Getting started
 
-AMB-1 starts playing as soon as it's on. A few minutes with it:
+AMB-1 starts playing as soon as you switch it on. Try this:
 
-1. **Listen.** The first piece, Garden, is playing: D Dorian, pad, bells, bass and a soft pulse.
-   Turn MASTER for the volume.
+1. **Listen.** The first piece, Garden, is playing in D Dorian, with the pad, bells, bass and a
+   soft pulse. Turn MASTER to set the volume.
 2. **Try another piece.** Turn PRESETS. Each of the eight pieces has its own key, tempo, sounds
    and amount of movement.
-3. **Change the scale.** Press a key whose note is lit: it leaves the scale, and nothing plays
-   it any more. Press it again to bring it back. Any key that isn't lit adds its note.
-4. **Move on.** Press EDIT: the pad moves to the next chord at the start of the next bar.
-5. **Freeze.** Press REC: the chord holds and the reverb rings on forever, while the bells and
+3. **Change the scale.** Press a key whose note is lit to take that note out of the scale, so
+   nothing plays it. Press it again to bring it back. Press a key that isn't lit to add its note.
+4. **Move on.** Press EDIT, and the pad moves to the next chord at the start of the next bar.
+5. **Freeze.** Press REC to hold the chord and let the reverb ring on forever, while the bells and
    pulse go on above it. Press REC again to let it go.
-6. **Shape a layer.** Each layer has a button: ENV the pad, ARP the bells, LFO the bass, SEQ the
-   pulse, FX the space, HOME the garden as a whole, GLO the setup. KNOB 1–4 set the four values
-   at the bottom of the screen, a layer's level always on KNOB 1. SELECT steps through the pages.
-7. **Rest.** Press PLAY: the garden stops growing and its sounds fade out slowly. PLAY again and
-   it grows back.
+6. **Shape a layer.** Each layer has its own button: ENV for the pad, ARP for the bells, LFO for
+   the bass and SEQ for the pulse. FX opens the space, HOME the garden as a whole, and GLO the
+   setup. Turn KNOB 1–4 to set the four values at the bottom of the screen. KNOB 1 is always the
+   layer's level. Turn SELECT to step through the pages.
+7. **Rest.** Press PLAY, and the garden stops growing while its sounds slowly fade out. Press PLAY
+   again and it grows back.
 
-What you change is kept with the piece. AMB-1 saves it by itself while resting, or press SAVE.
+Each piece keeps what you change. AMB-1 saves by itself while it rests, or you can press SAVE.
 
-Not sure what a button does? Hold it for a second: a card says. Let go and nothing happens.
+To find out what a button does, hold it for a second to see a card. Let go and nothing happens.
 
 ---
 
 ## 3. Controls
 
-The drawing at the top shows them all; here they are in more detail.
+The drawing at the top shows every control. Here they are in more detail.
 
 | Control | What it does |
 |---|---|
-| Keys | The scale. Each key adds its note to the scale or takes it out; the keys light up for the notes in it. Every octave of a note is the same key. The root stays, and the scale keeps at least three notes. |
-| PLAY | Grow / rest. AMB-1 starts growing by itself when it's switched on. At rest, the sounds fade out slowly and the reverb rings away. Lit green while growing. |
-| REC | **Freeze**: the chord holds and the reverb rings on forever, while the bells and pulse go on dry above it. Press again to thaw. Lit while frozen. |
-| EDIT | The next chord, at the start of the next bar (at once while resting). |
-| HOME | The Garden page: the whole garden. |
-| ENV · ARP · LFO · SEQ | The layers' pages: Pad, Bells, Bass, Pulse. |
-| FX · GLO | The Space and Setup pages. The lit button shows the page. |
-| SELECT | The previous or next page. Hold HOME and turn it for the tempo, from any page. |
-| ALGORITHM | Mode: Ionian, Dorian, Phrygian, Lydian, Mixolydian, Aeolian, pentatonic major and minor. Loads the mode's scale; editing it with the keys makes it Custom. |
-| PRESETS | The piece (see [The pieces](#s6)). |
-| KNOB 1–4 | The four values on the screen. A few clicks are always single steps; a quick turn speeds up, so half a turn sweeps the range. |
-| OCT− / OCT+ | The bells' octave, two down to two up, from any page. |
-| MASTER | Volume. |
-| SAVE | Saves all eight pieces. Held for 1.5 s: puts the piece back to its recipe. |
+| Keys | The keys are the scale, and they light up for the notes in it. Press a key to add its note or take it out. Every octave of a note is the same key. The root always stays, and the scale keeps at least three notes. |
+| PLAY | Grows or rests the garden. AMB-1 starts growing by itself when you switch it on. When it rests, the sounds slowly fade out and the reverb rings away. PLAY is lit green while it grows. |
+| REC | Freezes the chord. The reverb rings on forever, while the bells and pulse go on dry above it. Press REC again to thaw. It's lit while frozen. |
+| EDIT | Moves to the next chord at the start of the next bar, or right away while resting. |
+| HOME | Opens the Garden page, for the whole garden. |
+| ENV · ARP · LFO · SEQ | Open the layers' pages: Pad, Bells, Bass and Pulse. |
+| FX · GLO | Open the Space and Setup pages. The lit button shows which page you're on. |
+| SELECT | Turns to the previous or next page. To change the tempo from any page, hold HOME and turn SELECT. |
+| ALGORITHM | Picks the mode: Ionian, Dorian, Phrygian, Lydian, Mixolydian, Aeolian, or pentatonic major or minor. It loads the mode's scale. Once you change the scale with the keys, it's Custom. |
+| PRESETS | Picks the piece. For the list, see [The pieces](#s6). |
+| KNOB 1–4 | Set the four values on the screen. A few clicks always move one step at a time, and a quick turn speeds up, so half a turn sweeps the whole range. |
+| OCT− / OCT+ | Move the bells down or up an octave, up to two either way, from any page. |
+| MASTER | Sets the volume. |
+| SAVE | Saves all eight pieces. Hold it for 1.5 s to put the piece back to its recipe. |
 
-**Help:** hold any button but PLAY for a second and a card says what it does. A key, a knob or
-another button puts the card away; letting go after it does nothing else.
+To find out what a button does, hold it for a second (any button but PLAY), and a card explains it.
+A key, a knob or another button puts the card away, and letting go does nothing else.
 
 ![SAVE's card over the Pad page: SAVES ALL EIGHT PIECES. KEEP HOLDING: THE PIECE BACK TO ITS RECIPE](img/screen-help.png "SAVE's card")
 
@@ -116,24 +118,26 @@ another button puts the card away; letting go after it does nothing else.
 ![The screen on the Garden page: Garden, D Dorian, tempo 72; the ring with the chord Dm7 in the middle, the four level bars on the left, the pulse rings on the right; TEMPO 72, EVOLVE 35, MOTION 50, DRIFT 39s](img/screen-garden.png "The Garden page (HOME)")
 ![The screen on the Pad page of the piece Voices: F Aeolian, tempo 56, the chord Fm7; LEVEL 85, SWELL 70, BRIGHT 67, COLOUR Voices](img/screen-voices.png "Voices, a piece with only the sung pad and a bass")
 
-- **Top line:** the piece, its root and mode. On the right, a slow beat light (a play triangle while
-  resting), the tempo (EXT when it follows MIDI clock), a dot when there are unsaved changes, and the
-  battery. Messages ("ADDED F#", "NEXT CHORD") show here for a moment.
-- **The battery:** three bars when it's full, fewer as it runs down. At one bar or none it turns
-  red: time to charge. Plugged into a computer, it shows a lightning bolt instead. While it charges
-  from a wall charger, the bars read high.
-- **Top right of the garden:** a thin bar fills up on the way to the next chord; while frozen it
-  says "held".
-- **The ring:** the twelve notes, C at the top. Notes in the scale are green, the chord's notes
-  a deeper green, the root is ringed in ink. The chord's name is in the middle.
-- **Around it:** the four bell loops, 13, 17, 23 and 29 beats, from the inside out. Each dot is a
-  beat; the blue ones hold a note. A playhead goes round each loop and glows when it rings a bell.
-- **Left:** the four layers' levels as they sound: pad (green), bells (blue), bass (olive),
-  pulse (dark).
-- **Right:** the three pulse rings: thump (16 steps), closed hat (12) and open hat (7). Hits
-  fade while the pulse sits a few bars out.
-- **Bottom:** the page's name and seven dots, one a page, then its four values, one for each knob:
-  a dial (or, for a switch, its positions) and the value. The one you're turning lights up.
+- The top line shows the piece, its root and its mode. On the right are a slow beat light (a play
+  triangle while resting), the tempo (EXT when it follows MIDI clock), a dot when there are unsaved
+  changes, and the battery. Messages such as "ADDED F#" and "NEXT CHORD" show here for a moment.
+- The battery shows three bars when it's full, and fewer as it runs down. At one bar or none it
+  turns red, and it's time to charge. When it's plugged into a computer, it shows a lightning bolt
+  instead. While it charges from a wall charger, the bars read high.
+- At the top right of the garden, a thin bar fills up on the way to the next chord. While frozen,
+  it says "held".
+- The ring shows the twelve notes, with C at the top. Notes in the scale are green, the chord's
+  notes a deeper green, and the root has an ink ring around it. The chord's name is in the middle.
+- Around the ring are the four bell loops, 13, 17, 23 and 29 beats long, from the inside out. Each
+  dot is a beat, and the blue ones hold a note. A playhead goes round each loop and glows when it
+  rings a bell.
+- On the left are the four layers' levels as they sound: pad (green), bells (blue), bass (olive)
+  and pulse (dark).
+- On the right are the three pulse rings: the thump (16 steps), the closed hat (12) and the open
+  hat (7). The hits fade while the pulse sits a few bars out.
+- At the bottom are the page's name and seven dots, one for each page, then its four values, one
+  for each knob. Each value has a dial (or, for a switch, its positions). The one you're turning
+  lights up.
 
 ![The Space page with ECHO TIME lit as it turns, set to 2 bars; ECHO 45, REVERB 65, SIZE 80](img/screen-turning.png "Turning Echo time on the Space page")
 
@@ -143,43 +147,45 @@ another button puts the card away; letting go after it does nothing else.
 
 AMB-1 grows four layers from one scale and one chord.
 
-- **Pad:** four breathing voices. Each swells in, hangs and fades on its own cycle (unequal
-  lengths, around 11 to 19 seconds at first, as in the tape loops of "2/1"), taking its note of
-  the chord as it starts, so the chord forms and dissolves instead of sitting there. Two colours:
-  a filtered Rhodes that blooms brighter as it swells, or sung voices. Every so often (**Drift**)
-  the chord moves to another one in the scale. Voices on notes the new chord shares hold to the
-  end of their breath; the others fade out and breathe in again on their new notes.
-- **Bells:** FM bells, soft-struck like a piano slowed to half speed, played by four tape loops
-  13, 17, 23 and 29 beats long. Each loop holds a few notes, so the loops slide against each other
-  and the melody never quite repeats. Each loop is its own shade of bell, and now and then a
+- The **pad** is four breathing voices. Each one swells in, hangs and fades on its own cycle. The
+  cycles have different lengths, around 11 to 19 seconds at first, like the tape loops of "2/1".
+  Each voice takes its note of the chord as it starts, so the chord forms and dissolves instead of
+  sitting still. The pad can be a filtered Rhodes that blooms brighter as it swells, or sung voices.
+  Every so often (set by **Drift**), the chord moves to another one in the scale. Voices on notes
+  the new chord shares hold to the end of their breath. The others fade out and breathe in again on
+  their new notes.
+- The **bells** are FM bells, struck softly like a piano slowed to half speed. Four tape loops play
+  them, 13, 17, 23 and 29 beats long. Each loop holds a few notes, so the loops slide against each
+  other and the melody never quite repeats. Each loop has its own shade of bell, and now and then a
   note rings with its octave.
-- **Bass:** the chord's root, low and soft, gliding; sometimes it leans on the fifth.
-- **Pulse:** a soft thump tuned to the chord's root, a closed hi-hat and an open one, each on its
-  own Euclidean pattern over 16, 12 and 7 sixteenths: polyrhythms. The patterns slowly turn and
-  gain or lose a hit.
+- The **bass** plays the chord's root, low, soft and gliding, and sometimes leans on the fifth.
+- The **pulse** is a soft thump tuned to the chord's root, a closed hi-hat and an open one. Each
+  plays its own Euclidean pattern, over 16, 12 and 7 sixteenths, so they make polyrhythms. The
+  patterns slowly turn, and gain or lose a hit.
 
-Then the space, after Eno's chain for *Discreet Music*: a short tape echo, a long tape loop (up to
-5.6 seconds, with two heads, each repeat coming back darker and thinner) and a plate reverb.
-They're most of what you hear. The echo is stereo, and it evolves: with **Motion** up, its two
-heads wander across the field, the repeats fall in changing patterns, and now and then the second
-head slides to another part of the loop, bending the repeats a little as it goes.
+Then comes the space, after Eno's chain for *Discreet Music*: a short tape echo, a long tape loop
+and a plate reverb. The tape loop is up to 5.6 seconds long and has two heads, and each repeat
+comes back darker and thinner. The space is most of what you hear. The echo is stereo, and it
+changes as it goes. With **Motion** up, its two heads wander across the stereo field and the
+repeats fall in changing patterns. Now and then the second head slides to another part of the
+loop, bending the repeats a little as it goes.
 
-Over it all:
+Two things move over it all:
 
-- **The arc:** a slow tide, a few minutes from end to end, between sparse (fewer bells, a darker
-  pad, a quieter pulse, more reverb) and full. **Motion** sets how far it swings, and how far the
-  smaller things wander: pitch, pan, the vowel, the echo's heads.
-- **Rests:** with **Evolve** up, the layers take breaths: the pulse sits out two to four bars,
-  the bass skips a chord, a bell loop goes quiet for a pass.
+- A slow tide takes a few minutes to swing between sparse and full. Sparse means fewer bells, a
+  darker pad, a quieter pulse and more reverb. **Motion** sets how far it swings, and how far the
+  smaller things wander: pitch, pan, the vowel and the echo's heads.
+- With **Evolve** up, the layers take rests. The pulse sits out two to four bars, the bass skips
+  a chord, or a bell loop goes quiet for one time round.
 
 ---
 
 ## 6. The pieces
 
-PRESETS chooses one of eight pieces. Each is a recipe for the whole garden: the layers, the
-sounds, tempo, key and mode, how busy it is and how far it moves. Each remembers how you left it.
-Hold SAVE for 1.5 s to put the piece you're on back to its recipe. Tune, MIDI out and Lights are
-the same for all.
+Turn PRESETS to choose one of eight pieces. Each piece is a recipe for the whole garden: the
+layers, the sounds, the tempo, key and mode, how busy it is and how far it moves. Each one
+remembers how you left it. To put the piece you're on back to its recipe, hold SAVE for 1.5 s.
+Tune, MIDI out and Lights are shared by all the pieces.
 
 | Piece | What it is |
 |---|---|
@@ -196,81 +202,83 @@ the same for all.
 
 ## 7. The pages
 
-One page a layer, each on its own button, with four values on KNOB 1–4. A layer's level is
-always KNOB 1. SELECT steps through them in this order.
+Each layer has its own page and its own button, with four values on KNOB 1–4. KNOB 1 is always
+the layer's level. Turn SELECT to step through the pages in this order.
 
 ### HOME: Garden
 
 ![The Garden page: TEMPO 72, EVOLVE 35, MOTION 50, DRIFT 39s](img/screen-garden.png "The Garden page")
 
-- **Tempo:** 30 to 120 (also HOME + SELECT, from any page).
-- **Evolve:** how restless the garden is. At 0 the loops repeat exactly. Turned up, a bell note
-  now and then changes or moves at the end of a pass, the pulse patterns turn and gain or lose a
-  hit, and the layers take rests.
-- **Motion:** how far the arc swings, and how much pitch, pan, the vowel and the echo wander
-  (at 0 the echo stays put: one head left, one right).
-- **Drift:** how long a chord lasts before the pad moves on, 20 seconds to 5 minutes (each time a
-  little more or less). EDIT moves on now.
+- **Tempo** goes from 30 to 120. You can also hold HOME and turn SELECT from any page.
+- **Evolve** sets how restless the garden is. At 0, the loops repeat exactly. Turn it up, and now
+  and then a bell note changes or moves as its loop comes round, the pulse patterns turn and gain
+  or lose a hit, and the layers take rests.
+- **Motion** sets how far the tide swings, and how much the pitch, pan, vowel and echo wander. At
+  0, the echo stays put, with one head left and one right.
+- **Drift** sets how long a chord lasts before the pad moves on, from 20 seconds to 5 minutes,
+  each time a little more or less. Press EDIT to move on now.
 
 ### ENV: Pad
 
 ![The Pad page: LEVEL 60, SWELL 60, BRIGHT 40, COLOUR Rhodes](img/screen-pad.png "The Pad page")
 
-- **Level.**
-- **Swell:** how long the voices breathe, from a few seconds to about half a minute.
-- **Bright:** opens the pad's filter and brightens the Rhodes; for the Voices it also moves the
-  vowel from "oo" to "eh".
-- **Colour:** Rhodes or Voices. Each piece keeps its own.
+- **Level** sets the pad's volume.
+- **Swell** sets how long the voices breathe, from a few seconds to about half a minute.
+- **Bright** opens the pad's filter and brightens the Rhodes. With Voices, it also moves the vowel
+  from "oo" to "eh".
+- **Colour** picks Rhodes or Voices. Each piece keeps its own.
 
 ### ARP: Bells
 
 ![The Bells page: LEVEL 65, DENSITY 40, TONE 50, OCTAVE 0](img/screen-bells.png "The Bells page")
 
-- **Level.**
-- **Density:** how many notes each loop holds, none at 0 to five at the top. A change shows up as
-  each loop comes round.
-- **Tone:** from round and soft-struck to a long metallic clang.
-- **Octave:** two down to two up (OCT− and OCT+ too).
+- **Level** sets the bells' volume.
+- **Density** sets how many notes each loop holds, from none at 0 to five at the top. You'll hear
+  the change as each loop comes round.
+- **Tone** goes from round and softly struck to a long metallic clang.
+- **Octave** moves the bells up to two octaves down or up. OCT− and OCT+ do the same.
 
 ### LFO: Bass
 
 ![The Bass page: LEVEL 45, OCTAVE 0, GLIDE 20, FIFTH 35](img/screen-bass.png "The Bass page")
 
-- **Level.**
-- **Octave:** one down, home, or one up.
-- **Glide:** how slowly the bass slides to its next note, from a quick step to over a second.
-- **Fifth:** how often, halfway through a chord, the bass leans on the fifth.
+- **Level** sets the bass's volume.
+- **Octave** puts the bass one octave down, at home, or one octave up.
+- **Glide** sets how slowly the bass slides to its next note, from a quick step to over a second.
+- **Fifth** sets how often the bass leans on the fifth, halfway through a chord.
 
 ### SEQ: Pulse
 
 ![The Pulse page: LEVEL 40, HITS 35, SWING 50%, HATS 50](img/screen-pulse.png "The Pulse page")
 
-- **Level.**
-- **Hits:** how many beats the three rings play. 0: no pulse.
-- **Swing:** the off sixteenths later, from straight (50%) to a heavy lilt (75%).
-- **Hats:** from dark and long to bright and crisp.
+- **Level** sets the pulse's volume.
+- **Hits** sets how many beats the three rings play. At 0, there's no pulse.
+- **Swing** pushes the off sixteenths later, from straight (50%) to a heavy lilt (75%).
+- **Hats** goes from dark and long to bright and crisp.
 
 ### FX: Space
 
 ![The Space page: ECHO 45, ECHO TIME 1 bar, REVERB 65, SIZE 80](img/screen-space.png "The Space page")
 
-- **Echo:** how much goes to the echoes.
-- **Echo time:** the tape loop's length: a dotted quarter, a half, a dotted half, 1, 2 or 4 bars,
-  shortened to fit its 5.6 seconds at slow tempos. The second head repeats at three quarters of it,
-  or with Motion up, at two thirds, five eighths, a half or three eighths.
-- **Reverb:** how much goes to the plate.
-- **Size:** how long the plate rings, from a room to a long hall, and how many times the echo
+- **Echo** sets how much goes to the echoes.
+- **Echo time** sets the tape loop's length: a dotted quarter, a half, a dotted half, or 1, 2 or 4
+  bars. At slow tempos, it's shortened to fit the loop's 5.6 seconds. The second head repeats at
+  three quarters of that. With Motion up, it moves between two thirds, five eighths, a half and
+  three eighths.
+- **Reverb** sets how much goes to the plate.
+- **Size** sets how long the plate rings, from a room to a long hall, and how many times the echo
   comes back.
 
 ### GLO: Setup
 
 ![The Setup page: ROOT D, TUNE 0, MIDI OUT On, LIGHTS On](img/screen-setup.png "The Setup page")
 
-- **Root:** the key's root note. The scale moves with it.
-- **Tune:** fine tuning, ±50 cents.
-- **MIDI out:** on or off.
-- **Lights:** On: the keys light the scale, and the unlit buttons glow dimly so they can be read
-  on the black FM-1. Keys: the key lights only. Off.
+- **Root** sets the key's root note, and the scale moves with it.
+- **Tune** fine-tunes AMB-1 by up to 50 cents either way.
+- **MIDI out** turns MIDI out on or off.
+- **Lights** has three settings. With On, the keys light the scale, and the unlit buttons glow
+  dimly so you can find them on the black FM-1. With Keys, only the keys light. Off turns the
+  lights off.
 
 The top right of this page shows how much of the FM-1's time the sound takes (CPU).
 
@@ -280,58 +288,61 @@ The top right of this page shows how much of the FM-1's time the sound takes (CP
 
 MIDI comes in over USB and the TRS jack, and goes out over USB.
 
-- **In, channel 1:** a note adds or removes its note from the scale, like a key.
-- **In, clock:** the beat follows MIDI clock, and start / stop start and stop the garden. The
-  screen shows EXT for the tempo.
-- **Out** (on by default): the pad on channel 1, the bells on 2, the bass on 3 and the pulse on 10,
-  and clock with start / stop when AMB-1 runs on its own tempo. Turning MIDI out off sends all
-  notes off.
+- A note on channel 1 adds its note to the scale or takes it out, like a key.
+- When MIDI clock comes in, AMB-1 follows its beat, and start and stop start and stop the garden.
+  The screen shows EXT for the tempo.
+- MIDI out is on by default. The pad plays on channel 1, the bells on 2, the bass on 3 and the
+  pulse on 10. When AMB-1 runs on its own tempo, it also sends clock, start and stop. Turning MIDI
+  out off sends all notes off.
 
 ### Screen reader
 
-AMB-1 can tell a screen reader what its screen shows. Connect the FM-1 by USB, open the
+AMB-1 can tell a screen reader what its screen shows. Connect the FM-1 by USB, open
 [FM-1 Screen Reader](https://charlesvestal.github.io/fm1-reader/) in Chrome or Edge, and click
 Connect. It reads out the page you're on and its knobs, a knob's value as you turn it, the piece
 and its key, the notes you add or take out, help cards, every message, and the chord each time
-the garden moves on, in words: "E flat pentatonic minor", not "Eb Pent min".
+the garden moves on. It says them in words, such as "E flat pentatonic minor" rather than
+"Eb Pent min".
 
-The page can speak with its own voice or pass everything to your own screen reader (VoiceOver,
-NVDA, JAWS, TalkBack). Press W to hear the whole screen again: the page, the piece, the battery, the
-chord and the scale. The FM-1 says nothing until the page connects, so a DAW on the same cable never sees it.
+The page can speak with its own voice, or pass everything to your own screen reader (VoiceOver,
+NVDA, JAWS or TalkBack). Press W to hear the whole screen again: the page, the piece, the battery,
+the chord and the scale. The FM-1 stays quiet until the page connects, so a DAW on the same cable
+never sees it.
 
 ---
 
 ## 9. Saving
 
 AMB-1 keeps all eight pieces in the FM-1's memory, each as you left it: the knobs, the scale,
-the tempo, the pad's colour and the bells' octave, plus Tune, MIDI out and Lights.
+the tempo, the pad's sound and the bells' octave, plus Tune, MIDI out and Lights.
 
-- **By itself:** a few seconds after a change, but only while resting. Writing to the memory
-  interrupts the sound for a moment, so it never happens while the garden grows. A dot at the top
-  of the screen means there are unsaved changes.
-- **SAVE:** saves now, playing or not.
-- **Hold SAVE** for 1.5 s: the piece goes back to its recipe. That isn't saved until the next save,
-  so switching off before then brings your version back.
+- AMB-1 saves by itself a few seconds after a change, but only while it rests. Writing to the
+  memory interrupts the sound for a moment, so it never saves while the garden grows. A dot at the
+  top of the screen means there are unsaved changes.
+- Press SAVE to save now, whether it's playing or not.
+- Hold SAVE for 1.5 s to put the piece back to its recipe. That isn't saved until the next save,
+  so if you switch off before then, your version comes back.
 
 ---
 
 ## 10. Troubleshooting
 
-**Update mode:** hold OCT- and OCT+ together for five seconds. A countdown appears; let go
-before it ends to cancel.
+To put the FM-1 in update mode, hold REC while you switch it on. If you installed m-bootloader
+with the web installer, the installer can reach the FM-1 from there, and holding PLAY instead
+opens m-bootloader's recovery menu. Without m-bootloader, REC starts the chip's own update mode,
+which only the rescue below can reach.
 
-**Calibration:** if a button or knob does the wrong thing, hold OCT- and OCT+ while you switch
-the FM-1 on. The screen then asks you to press each button and turn each knob in turn.
+If a button or knob does the wrong thing, calibrate the panel. Hold OCT− and OCT+ while you switch
+the FM-1 on, and the screen asks you to press each button and turn each knob in turn.
 
-**After a crash:** AMB-1 shows a red CRASH screen and restarts by itself a few seconds later. The
-next start shows RESTARTED AFTER A CRASH and an address (PC ...) for a moment. If you report the
+If AMB-1 crashes, it shows a red CRASH screen and restarts by itself a few seconds later. The next
+start shows RESTARTED AFTER A CRASH and an address (PC ...) for a moment. If you report the
 problem, include that address and what you were doing.
 
-**Safe mode:** if AMB-1 crashes twice in a row while starting, it starts in SAFE MODE instead.
-There's no sound, but USB works, so the web installer can reach it: reinstall AMB-1, or put the
-stock firmware back from the same page. Press PLAY to try starting AMB-1 normally again. If even
-safe mode fails twice, the FM-1 drops into the chip's own update mode, and only the rescue below
-can reach it.
+If AMB-1 crashes twice in a row while starting, it starts in SAFE MODE instead. There's no sound,
+but USB works, so the web installer can reach it. Reinstall AMB-1, or put the stock firmware back
+from the same page. Press PLAY to try starting AMB-1 normally again. If even safe mode fails twice,
+the FM-1 drops into the chip's own update mode, and only the rescue below can reach it.
 
 ### Recovering an FM-1 that won't start
 
@@ -404,8 +415,8 @@ The defaults are Garden's; each piece has its own.
 
 ## 12. Credits
 
-AMB-1 is free software under the GNU General Public License, version 3. If you share the
-firmware, you must also share its source code.
+AMB-1 is free software under the Mozilla Public License 2.0. If you share a changed version,
+share the source of the files you changed too.
 
 - The idea comes from Brian Eno's generative music: *Music for Airports*' tape loops of unequal
   length, and the echo and tape-delay chain of *Discreet Music*.
@@ -418,5 +429,5 @@ firmware, you must also share its source code.
 - The idea of running FM-1 firmware in the browser comes from [Groove OS](https://www.groove-os.com/).
 - The fonts are Barlow Semi Condensed and Terminus (SIL Open Font License).
 
-M-VAVE and FM-1 are trademarks of their owners. AMB-1 is not connected with M-VAVE, Brian Eno or
+M-VAVE and FM-1 are trademarks of their owners. AMB-1 is not affiliated with M-VAVE, Brian Eno or
 Hügelton Instruments.

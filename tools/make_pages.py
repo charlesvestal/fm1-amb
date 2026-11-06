@@ -77,33 +77,35 @@ code { font-size: .9em; }
 <main>
 <h1>AMB-1</h1>
 <p class="sub">An ambient garden for the M-VAVE FM-1</p>
-<p class="lede">A generative ambient machine, inspired by Brian Eno's <i>Music for Airports</i>. It plays itself from the moment it's switched on. You don't perform it, you tend it: pick a
-piece and a scale, take notes out, put them back, and let it grow.</p>
+<p class="lede">AMB-1 is a generative ambient machine, inspired by Brian Eno's <i>Music for Airports</i>. Switch
+it on and it starts playing by itself. You don't perform it so much as tend it: pick a piece and a scale, take
+notes out, put them back, and let it grow.</p>
 <div class="shots">
   <img src="img/screen-garden.png" width="240" height="240" alt="AMB-1's screen: the scale as a ring with the chord Dm7, the four bell loops around it, the pulse rings on the right">
   <img src="img/screen-voices.png" width="240" height="240" alt="AMB-1's screen: the piece Voices, F Aeolian, the chord Fm7">
   <img src="img/screen-frozen.png" width="240" height="240" alt="AMB-1's screen: frozen, the chord held">
 </div>
 <nav class="ways" aria-label="Get AMB-1">
-  <a href="emu/"><strong>Try it in the browser</strong><span>The same code the FM-1 runs, with sound. Mouse, touch or keyboard; no FM-1 needed.</span></a>
-  <a href="install/"><strong>Install <em class="v">v__VERSION__</em></strong><span>From Chrome or Edge, with the FM-1 connected by USB. Nothing to install on the computer.</span></a>
-  <a href="manual/"><strong>Manual</strong><span>Getting started in a few minutes, then everything else.</span></a>
+  <a href="emu/"><strong>Try it in the browser</strong><span>Listen right here, and play it with a mouse, a touch screen or the keyboard. It runs the same code as the FM-1, so you don't need one.</span></a>
+  <a href="install/"><strong>Install <em class="v">v__VERSION__</em></strong><span>Connect your FM-1 by USB and install from Chrome or Edge. There's nothing to install on your computer.</span></a>
+  <a href="manual/"><strong>Manual</strong><span>Get started in a few minutes, then read about everything else.</span></a>
   <a href="firmware/__PKG__"><strong>Download <em class="v">__PKG__</em></strong><span>For the command-line installer: <code>python3 base/tools/fm1_install.py __PKG__</code></span></a>
-  <a href="__REPO__"><strong>Source</strong><span>GitHub, MPL-2.0. Built on fm1-base and felucca-bsp, from Felucca by Hügelton Instruments.</span></a>
+  <a href="__REPO__"><strong>Source</strong><span>On GitHub under MPL-2.0. Built on fm1-base and felucca-bsp, which grew out of Felucca by Hügelton Instruments.</span></a>
 </nav>
 
 <h2>The garden</h2>
 <ul class="garden">
-  <li><b>Pad.</b> Four breathing voices, a Rhodes or sung voices, each swelling and fading on its own cycle, so the chord forms and dissolves. Now and then it drifts to another chord in the scale.</li>
-  <li><b>Bells.</b> Soft FM bells on four tape loops 13, 17, 23 and 29 beats long, sliding against each other so the melody never quite repeats.</li>
-  <li><b>Bass.</b> The chord's root, low and gliding.</li>
-  <li><b>Pulse.</b> A thump and two hats on Euclidean patterns of 16, 12 and 7 steps.</li>
-  <li><b>Space.</b> A tape echo, a long tape loop and a plate reverb: most of what you hear. REC freezes the chord and lets the reverb ring on forever.</li>
+  <li>The <b>pad</b> is four breathing voices, a Rhodes or sung voices. Each one swells and fades on its own cycle, so the chord forms and dissolves, and now and then it drifts to another chord in the scale.</li>
+  <li>Soft FM <b>bells</b> play from four tape loops 13, 17, 23 and 29 beats long. The loops slide against each other, so the melody never quite repeats.</li>
+  <li>The <b>bass</b> plays the chord's root, low and gliding.</li>
+  <li>The <b>pulse</b> is a thump and two hats on Euclidean patterns of 16, 12 and 7 steps.</li>
+  <li>The <b>space</b> is a tape echo, a long tape loop and a plate reverb, and it's most of what you hear. Press REC to freeze the chord and let the reverb ring on forever.</li>
 </ul>
-<p>Eight pieces, each remembering how you left it. The keys are the scale: press one to take its note out or
-put it back. A slow tide between sparse and full, and rests now and then, keep it moving for hours.</p>
-<p class="small">To go back to the official firmware, use the installer's "Back to the stock firmware", or
-M-VAVE's updater, M-UPGRADE, from <a href="https://www.m-vave.com/download">m-vave.com/download</a>.
+<p>Choose from eight pieces, and each one remembers how you left it. The keys are the scale: press one to take
+its note out or put it back. A slow tide between sparse and full, with rests now and then, keeps it moving for
+hours.</p>
+<p class="small">To go back to the official firmware, use "Back to the stock firmware" in the installer, or
+M-VAVE's own updater, M-UPGRADE, from <a href="https://www.m-vave.com/download">m-vave.com/download</a>.
 M-VAVE and FM-1 are trademarks of their owners. AMB-1 is not affiliated with M-VAVE or Brian Eno.</p>
 </main>
 </body>
