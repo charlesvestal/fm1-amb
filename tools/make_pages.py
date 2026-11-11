@@ -7,7 +7,7 @@
   img/                        screenshots (docs/img)
   emu/                        AMB-1 in the browser (app/build/emu, from ./build.sh --web)
   words/                      the screen reader's words files (app/web/words, from app/words.tsv)
-  install/index.html          fm1-base's web installer (base/web/installer.html, with fm1pkg.js, fm1ota.js and
+  install/index.html          fm1-base's web installer (base/web/installer.html, with fm1ports.js, fm1pkg.js, fm1ota.js and
                               the package's metadata inlined; Chrome or Edge, Web MIDI)
   manual/index.html, img/     the manual (fm1-base's tools/manual_html.py, from docs/MANUAL.md)
   firmware/amb-VERSION.fwsc   the package the installer writes; also the download
@@ -130,8 +130,8 @@ def main(pkg, version, out):
     # the installer: fm1-base's page, filled in from app/fm1.toml
     conf = read_conf(SRC / "app" / "fm1.toml")
     page = (BASE / "web" / "installer.html").read_text(encoding="utf-8")
-    lib = strip_module((BASE / "web" / "fm1pkg.js").read_text(encoding="utf-8")) + "\n" + \
-        strip_module((BASE / "web" / "fm1ota.js").read_text(encoding="utf-8"))
+    lib = "\n".join(strip_module((BASE / "web" / f).read_text(encoding="utf-8"))   # (fm1ota.js asks fm1ports.js's)
+                    for f in ("fm1ports.js", "fm1pkg.js", "fm1ota.js"))
     # m-bootloader (MIT), which the installer offers to install after AMB-1, with its licence (as fm1-base's make_site)
     boot = BASE / "web" / "m-bootloader" / f"fm1-uboot-{MBOOT_VERSION}.fwsc"
     boot_name = f"m-bootloader-{MBOOT_VERSION}.fwsc"
