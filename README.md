@@ -65,3 +65,5 @@ GPL-3.0-only); see [LICENSING.md](LICENSING.md).
 
 M-VAVE and FM-1 are trademarks of their owners. AMB-1 is not affiliated with M-VAVE, Brian Eno or
 Hügelton Instruments.
+
+You can also try AMB-1 in the browser, no flashing needed, in the free community [FM-1 Emulator](https://fm1-emulator.atst.tools/).
